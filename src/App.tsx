@@ -7,9 +7,8 @@ import {
     View,
 } from "react-native";
 
-import {
-    Colors,
-} from "react-native/Libraries/NewAppScreen";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const App = () => {
     const isDarkMode = useColorScheme() === "dark";
@@ -24,6 +23,7 @@ const App = () => {
             <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
             <View style={backgroundStyle}>
                 <Text>Pog</Text>
+                <Icon name="mail" size={30} color="#4F8EF7" />
             </View>
         </SafeAreaView>
     );
