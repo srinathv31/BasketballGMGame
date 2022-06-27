@@ -1,6 +1,6 @@
 // Source Imports
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { PlayerObject } from "../../interfaces/Player";
 
@@ -10,7 +10,8 @@ export default function PlayerRosterCard({ player, index, bench }: {
     bench?: boolean
 }): JSX.Element {
     return(
-        <View style={{ flexDirection: "row", padding: 10, marginVertical: bench ? 0 : 10, backgroundColor: index % 2 ? "#ededed" : "white", alignItems: "center" }} key={index}>
+        <TouchableOpacity onPress={() => console.log(player.name)}
+            style={{ flexDirection: "row", padding: 10, marginVertical: bench ? 0 : 10, backgroundColor: index % 2 ? "#ededed" : "white", alignItems: "center" }} key={index}>
             <Text style={{ marginHorizontal: 5, width: 32 }}>{player.position[0]}</Text>
             <Icon name="person" size={20} style={{ marginHorizontal: 5 }}></Icon>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
@@ -27,7 +28,7 @@ export default function PlayerRosterCard({ player, index, bench }: {
                     <Text style={styles.details}>{player.devTrait}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 
