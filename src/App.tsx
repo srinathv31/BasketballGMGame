@@ -8,7 +8,7 @@ import GamePage from "./screens/GamePage";
 import LeaguePage from "./screens/LeaguePage";
 import Overview from "./screens/Overview";
 import RosterPage from "./screens/RosterPage";
-LogBox.ignoreLogs(["Sending..."]);
+LogBox.ignoreLogs(["Sending"]);
 
 const App = () => {
     const layout = useWindowDimensions();
