@@ -1,18 +1,22 @@
 // Source Imports
 import React from "react";
 import { View, Text } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+import { PlayerObject } from "../../interfaces/Player";
+import { generateNewPlayer } from "../../utilities/draft/draftClassGenerator";
 import Divider from "../Design/Divider";
+import PlayerRosterCard from "./PlayerRosterCard";
 
 export default function Starters(): JSX.Element {
-    
-    const startingPostions = [
-        { position: "PG", name: "Jonesy" },
-        { position: "SG", name: "Jonesy" },
-        { position: "SF", name: "Jonesy" },
-        { position: "PF", name: "Jonesy" },
-        { position: "C", name: "Jonesy" },
-    ];
+
+    function generateTestPlayers() {
+        const playerList: PlayerObject[] = [];
+        for (let i=0;i<5;i++){
+            playerList.push(generateNewPlayer(playerList.length));
+        }
+        return playerList;
+    }
+
+    const playerList = generateTestPlayers();
 
     return(
         <>
@@ -20,13 +24,9 @@ export default function Starters(): JSX.Element {
                 <Text>Starters</Text>
                 <Divider length="small" color="black"/>
             </View>
-            {startingPostions.map((item, index) => {
+            {playerList.map((item, index) => {
                 return(
-                    <View style={{ flexDirection: "row", padding: 10, marginVertical: 10, backgroundColor: index % 2 ? "#e0e0e0" : "white", alignItems: "center" }} key={index}>
-                        <Icon name="mail" size={20}></Icon>
-                        <Text style={{ marginHorizontal: 10 }}>{item.position}</Text>
-                        <Text>{item.name}</Text>
-                    </View>
+                    <PlayerRosterCard player={item} index={index} key={index}/>
                 );
             })}
         </>

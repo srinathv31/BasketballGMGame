@@ -11,7 +11,7 @@ export default function TeamStatusHeader(): JSX.Element {
             <Text style={styles.teamText}>{"PHI"}</Text>
             <Text style={styles.details}>{"52 - 13"}</Text>
             <Text style={[styles.details, { fontWeight: capSpace < 0 ? "800" : "500" }]}>
-                {capSpace < 0 ? `Cap Space: (${capSpace})` : `Cap Space: ${capSpace}`}
+                {capSpace < 0 ? `Cap Space: ($${capSpace}M)` : `Cap Space: $${capSpace}M`}
             </Text>
         </View>
     );

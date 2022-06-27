@@ -28,7 +28,7 @@ export function generateDraftClass() {
     return draftClassList;
 }
 
-function generateNewPlayer(listLength: number): PlayerObject {
+export function generateNewPlayer(listLength: number): PlayerObject {
     const playerPosition: Postion[] = generatePosition();
     const playerHeight = generateHeight(playerPosition[0]);
     const playerWeight = generateWeight(playerHeight);
