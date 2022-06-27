@@ -10,7 +10,7 @@ export default function PlayerRosterCard({ player, index, bench }: {
     bench?: boolean
 }): JSX.Element {
     return(
-        <View style={{ flexDirection: "row", padding: 10, marginVertical: bench ? 0 : 10, backgroundColor: index % 2 ? "#e0e0e0" : "white", alignItems: "center" }} key={index}>
+        <View style={{ flexDirection: "row", padding: 10, marginVertical: bench ? 0 : 10, backgroundColor: index % 2 ? "#ededed" : "white", alignItems: "center" }} key={index}>
             <Text style={{ marginHorizontal: 5, width: 32 }}>{player.position[0]}</Text>
             <Icon name="person" size={20} style={{ marginHorizontal: 5 }}></Icon>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
