@@ -2,11 +2,13 @@
 import React from "react";
 import { View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setByValue } from "../redux/indexSlice";
 
-export default function BottomMenuTab({ setIndex, index }: {
-    setIndex: (i: number) => void, index: number
-}): JSX.Element {
-    
+export default function BottomMenuTab(): JSX.Element {
+    const index = useAppSelector(state => state.indexTracker.value);
+    const dispatch = useAppDispatch();
+
     const menuButtons = ["book", "person", "play", "stats-chart"];
 
     return(
@@ -15,7 +17,7 @@ export default function BottomMenuTab({ setIndex, index }: {
                 return(
                     <Icon
                         key={idx}
-                        onPress={() => setIndex(idx)}
+                        onPress={() => dispatch(setByValue(idx))}
                         name={index === idx ? item : `${item}-outline`}
                         size={25} 
                         color="#900"

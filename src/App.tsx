@@ -4,6 +4,8 @@ import { Route, TabView } from "react-native-tab-view";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import BottomMenuTab from "./components/BottomMenuTab";
 import Header from "./components/Header";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { setByValue } from "./redux/indexSlice";
 import GamePage from "./screens/GamePage";
 import LeaguePage from "./screens/LeaguePage";
 import Overview from "./screens/Overview";
@@ -20,7 +22,8 @@ const App = () => {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
 
-    const [index, setIndex] = useState<number>(1);
+    const index = useAppSelector(state => state.indexTracker.value);
+    const dispatch = useAppDispatch();
 
     const [routes] = useState([
         { key: "cal", title: "Overview" },
@@ -56,10 +59,10 @@ const App = () => {
                 <TabView
                     navigationState={{ index, routes }}
                     renderScene={renderScene}
-                    onIndexChange={setIndex}
+                    onIndexChange={(index) => dispatch(setByValue(index))}
                     initialLayout={{ width: layout.width }}
                     tabBarPosition="bottom"
-                    renderTabBar={() => <BottomMenuTab setIndex={setIndex} index={index} />}
+                    renderTabBar={() => <BottomMenuTab />}
                 />
             </SafeAreaView>
         </>
