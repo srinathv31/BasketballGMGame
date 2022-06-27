@@ -19,6 +19,7 @@ export default function Header(): JSX.Element {
                 onPress={() => console.log("CHEESE")}
             />
             <Text style={{ padding: 10, fontWeight: "800", color: "#FBFAF5" }}>{headerTexts[index]}</Text>
+            { index === 1 && <Text style={{ padding: 10, fontWeight: "500", color: "#FBFAF5", position: "absolute", right: 5 }}>Edit Lineup</Text>}
         </View>
     );
 }
