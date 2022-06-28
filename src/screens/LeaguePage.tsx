@@ -1,6 +1,7 @@
 // Source Imports
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import LeagueStandings from "../components/LeaguePage/LeagueStandings";
 import OptionTabs from "../components/OptionsTab";
 import MenuOption from "../interfaces/Menu";
 
@@ -14,8 +15,9 @@ export default function LeaguePage(): JSX.Element {
     ];
     
     return(
-        <View>
+        <View style={{ flex: 1 }}>
             <OptionTabs menuOptionsInitial={menuOptionsInitial}/>
+            <LeagueStandings />
         </View>
     );
 }
