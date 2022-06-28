@@ -1,11 +1,15 @@
 import { Game } from "./Game";
+import Owner from "./Owner";
 import { PlayerObject } from "./Player";
+import { Coach } from "./Staff";
 
 export interface Team {
     id: number,
     name: string,
     nameAbv: string,
     roster: Record<number, PlayerObject[]>,
+    staff: Record<number, Coach[]>,
+    owner: Owner,
     wins: number,
     losses: number,
     franchiseHistory: Record<number, SeasonResult>,
