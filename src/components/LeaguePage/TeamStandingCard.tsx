@@ -2,7 +2,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function TeamCard({ team }: {
+export default function TeamStandingCard({ team }: {
     team: { name: string, conference: string },
 }): JSX.Element {
     return(

@@ -3,7 +3,7 @@ import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import teamNamesList from "../../assets/teamNamesList.json";
 import StandingsHeader from "./StandingsHeader";
-import TeamCard from "./TeamCard";
+import TeamStandingCard from "./TeamStandingCard";
 
 export default function LeagueStandings(): JSX.Element {
     return(
@@ -16,7 +16,7 @@ export default function LeagueStandings(): JSX.Element {
                 {teamNamesList.filter(item => item.conference === "EAST").map((item, index) => {
                     return (
                         <View key={index} style={{ flex: 1, borderBottomWidth: index === 9 || index === 5 ? 1 : 0, borderColor: index === 5 ? "black" : "crimson" }}>
-                            <TeamCard team={item} />
+                            <TeamStandingCard team={item} />
                         </View>
                     );
                 })}
@@ -28,7 +28,7 @@ export default function LeagueStandings(): JSX.Element {
                         <View 
                             key={index} 
                             style={{ flex: 1, borderBottomWidth: index === 9 || index === 5 ? 1 : 0, borderColor: index === 5 ? "black" : "crimson" }}>
-                            <TeamCard team={item} />
+                            <TeamStandingCard team={item} />
                         </View>
                     );
                 })}

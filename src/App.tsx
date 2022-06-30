@@ -6,7 +6,7 @@ import BottomMenuTab from "./components/BottomMenuTab";
 import Header from "./components/Header";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { setByValue } from "./redux/indexSlice";
-import GamePage from "./screens/GamePage";
+import NextGamePage from "./screens/NextGamePage";
 import LeaguePage from "./screens/LeaguePage";
 import Overview from "./screens/Overview";
 import RosterPage from "./screens/RosterPage";
@@ -41,7 +41,7 @@ const App = () => {
             case "cal":
                 return <Overview />;
             case "supp":
-                return <GamePage />;
+                return <NextGamePage />;
             case "work":
                 return <LeaguePage />;
             default:

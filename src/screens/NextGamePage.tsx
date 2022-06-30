@@ -1,11 +1,11 @@
 // Source Imports
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import PlayerToWatchCard from "../components/GamePage/PlayerToWatchCard";
-import PlayGameButton from "../components/GamePage/PlayGameButton";
-import TeamCard from "../components/GamePage/TeamCard";
+import PlayerToWatchCard from "../components/NextGamePage/PlayerToWatchCard";
+import PlayGameButton from "../components/NextGamePage/PlayGameButton";
+import TeamCard from "../components/NextGamePage/TeamCard";
 
-export default function GamePage(): JSX.Element {
+export default function NextGamePage(): JSX.Element {
     return(
         <>
             <View style={{ alignItems: "center" }}>
