@@ -2,14 +2,13 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function TeamCard({ team, index }: {
-    team: string,
-    index: number
+export default function TeamCard({ team }: {
+    team: { name: string, conference: string },
 }): JSX.Element {
     return(
         <TouchableOpacity onPress={() => console.log(team)}
-            style={{ flex: 1, flexDirection: "row", padding: 10, backgroundColor: index % 2 ? "#ededed" : "white", alignItems: "center" }}>
-            <Text style={{ marginHorizontal: 5, width: 32, fontSize: 12 }}>{team}</Text>
+            style={{ flex: 1, flexDirection: "row", padding: 10, backgroundColor: "white", alignItems: "center" }}>
+            <Text style={{ marginHorizontal: 5, width: 32, fontSize: 12 }}>{team.name}</Text>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
                 <Text style={styles.details}>{23}</Text>
                 <Text style={styles.details}>{7}</Text>

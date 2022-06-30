@@ -12,7 +12,7 @@ export default function BottomMenuTab(): JSX.Element {
     const menuButtons = ["book", "person", "play", "stats-chart"];
 
     return(
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-around", padding: 5 }}>
             {menuButtons.map((item, idx) => {
                 return(
                     <TouchableOpacity key={idx} onPress={() => dispatch(setByValue(idx))}>

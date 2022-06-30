@@ -1,11 +1,11 @@
 // Source Imports
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 export default function StandingsHeader(): JSX.Element {
     return(
-        <TouchableOpacity
-            style={{ flexDirection: "row", padding: 10, backgroundColor: "#ededed", alignItems: "center" }}>
+        <View
+            style={{ flexDirection: "row", padding: 10, backgroundColor: "white", alignItems: "center", borderColor: "black", borderBottomWidth: 1 }}>
             <Text style={{ marginHorizontal: 5, width: 32, fontSize: 12 }}>Team</Text>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
                 <Text style={styles.details}>W</Text>
@@ -14,7 +14,7 @@ export default function StandingsHeader(): JSX.Element {
                 <Text style={styles.details}>Last 10</Text>
                 <Text style={styles.details}>Streak</Text>
             </View>
-        </TouchableOpacity>
+        </View>
     );
 }
 

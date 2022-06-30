@@ -6,16 +6,18 @@ import { Coach } from "./Staff";
 export interface Team {
     id: number,
     name: string,
-    nameAbv: string,
     conference: "EAST" | "WEST",
     roster: Record<number, PlayerObject[]>,
     staff: Record<number, Coach[]>,
     owner: Owner,
+    overall: number,
+    defOverall: number,
+    offOverall: number,
     wins: number,
     losses: number,
     franchiseHistory: Record<number, SeasonResult>,
     playoffStatus: "Lottery Team" | "Playoff Team" | "Contenders",
-    schedule: Record<number, Game>,
+    schedule?: Record<number, Game>,
 }
 
 type SeasonOutcome = "Missed Playoffs" | "First Round" | "Second Round" | "Conference Finals" | "Finals" | "Champions";
