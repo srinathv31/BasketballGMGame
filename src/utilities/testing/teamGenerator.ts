@@ -7,11 +7,12 @@ export default function TeamGenerator() {
     const teamData: Team[] = [];
     const playerList: PlayerObject[] = [];
 
-    for (let i=0;i<10;i++){
+    const teamList = [{ name: "PHI", conference: "EAST" }, { name: "NYK", conference: "EAST" }];
+    for (let i=0;i<5;i++){
         playerList.push(playerGenerator());
     }
 
-    teamNameList.forEach(team => {
+    teamList.forEach(team => {
         const newTeam: Team = {
             id: teamData.length,
             name: team.name,
@@ -40,6 +41,6 @@ export default function TeamGenerator() {
         };
         teamData.push(newTeam);
     });
-    console.log(teamData);
+    // console.log(teamData);
     return teamData;
 }
