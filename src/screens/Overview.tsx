@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ImageBackground } from "react-native";
 import TeamLogo from "../components/GamePage/TeamLogo";
 import { Team } from "../interfaces/Team";
+import { gameLog } from "../utilities/game/gameLog";
+import { randomNumberGenerator } from "../utilities/randomNumberGenerator";
 import TeamGenerator from "../utilities/testing/teamGenerator";
 
 export default function Overview(): JSX.Element {
@@ -13,8 +15,20 @@ export default function Overview(): JSX.Element {
         "FIELD GOALS", "3 POINTERS", "FREE THROWS", "ASSISTS", "REBOUNDS", "STEALS", "BLOCKS", "TURNOVERS"
     ];
 
-    const scores1 = [ 23, 21, 13, 14 ];
-    const scores2 = [ 11, 9, 19, 16 ];
+    const [scores1, setScores1] = useState<Record<string, number>>({
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "Total": 0
+    });
+    const [scores2, setScores2] = useState<Record<string, number>>({
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "Total": 0
+    });
 
     function scoreTeam(home: boolean, logoSizeCopy: { home: number, away: number }) {
         // const logoSizeCopy = { ...logoSize };
@@ -25,27 +39,63 @@ export default function Overview(): JSX.Element {
             logoSizeCopy.away < 50 ? logoSizeCopy.away++ : console.log("max size");
             logoSizeCopy.home > 20 ? logoSizeCopy.home-- : console.log("min size");
         }
-        console.log(logoSizeCopy);
         return logoSizeCopy;
-        // setLogoSize(logoSizeCopy);
     }
 
     const [possession, setPossession] = useState<number>(0);
     const [gameRunning, setGameRunning] = useState<boolean>(false);
 
+    const [gameAction, setGameAction] = useState<string>("-");
+
     useEffect(() => {
         if (gameRunning) {
             // create a interval and get the id
             const myInterval = setInterval(() => {
+                let homeScore = false;
+                let quarter = 1;
                 setPossession(currPossession => {
-                    setLogoSize((currLogoSize) => currPossession % 3 ? scoreTeam(false, currLogoSize) : scoreTeam(true, currLogoSize));
+                    quarter = Math.floor(currPossession/50)+1;
+                    if (currPossession === 199) {
+                        setGameRunning(false);
+                    }
+                    currPossession % 2 ? 
+                        homeScore = true :
+                        homeScore = false;
+
                     return currPossession + 1;
                 });
-            }, 1000);
+                homeScore ? 
+                    setScores1(currTeamScore => {
+                        const score = randomNumberGenerator(4);
+                        if (score !== 0) {
+                            setLogoSize(currLogoSize => scoreTeam(true, currLogoSize));
+                        }
+                        setGameAction(gameLog(score, "PHI"));
+                        return addScore(currTeamScore, score, quarter);
+                    }) :
+                    setScores2(currTeamScore => {
+                        const score = randomNumberGenerator(4);
+                        if (score !== 0) {
+                            setLogoSize(currLogoSize => scoreTeam(false, currLogoSize));
+                        }
+                        setGameAction(gameLog(score, "NYK"));
+                        return addScore(currTeamScore, score, quarter);
+                    });
+
+            }, 200);
             // clear out the interval using the id when unmounting the component
             return () => clearInterval(myInterval);
         }
     }, [gameRunning]);
+
+
+    function addScore(teamScore: Record<number, number>, score: number, quarter: number) {
+        const teamScoreCopy = { ...teamScore } as Record<string, number>;
+        teamScoreCopy[""+quarter] = teamScoreCopy[""+quarter] + score;
+        teamScoreCopy["Total"] = teamScoreCopy["Total"] + score;
+        console.log(teamScoreCopy);
+        return teamScoreCopy;
+    }
 
     return(
         <>
@@ -59,27 +109,27 @@ export default function Overview(): JSX.Element {
                 <Text style={{ alignSelf: "center" }}>Q: 1 2 3 4</Text>
             </View>
             <View style={{ padding: 25, borderColor: "black", borderWidth: 1 }}>
-                <Text style={{ alignSelf: "center" }}>3P SHOT: FROM THE CORNER</Text>
+                <Text style={{ alignSelf: "center" }}>{gameAction}</Text>
             </View>
             <View style={{ backgroundColor: "silver", padding: 15 }}>
                 <View style={{ flexDirection: "row", justifyContent: "center" }}>
                     <Text style={{ alignSelf: "center", width: 40, textAlign: "right" }}>PHI: </Text>
-                    {scores1.map((item, index) => {
+                    {Object.keys(scores1).map((item, index) => {
                         return (
                             <View key={index} style={{ flexDirection: "row" }}>
-                                <Text style={{ alignSelf: "center", width: 20, textAlign: "center" }}>{item}</Text>
-                                { index !== 3 && <Text style={{ alignSelf: "center" }}> | </Text>}
+                                <Text style={{ alignSelf: "center", width: 25, textAlign: "center" }}>{scores1[item]}</Text>
+                                { index !== 4 && <Text style={{ alignSelf: "center" }}> | </Text>}
                             </View>
                         );
                     })}
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "center" }}>
                     <Text style={{ alignSelf: "center", width: 40, textAlign: "right" }}>NYK: </Text>
-                    {scores2.map((item, index) => {
+                    {Object.keys(scores2).map((item, index) => {
                         return (
                             <View key={index} style={{ flexDirection: "row" }}>
-                                <Text style={{ alignSelf: "center", width: 20, textAlign: "center" }} >{item}</Text>
-                                { index !== 3 && <Text style={{ alignSelf: "center" }}> | </Text>}
+                                <Text style={{ alignSelf: "center", width: 25, textAlign: "center" }} >{scores2[item]}</Text>
+                                { index !== 4 && <Text style={{ alignSelf: "center" }}> | </Text>}
                             </View>
                         );
                     })}
@@ -99,11 +149,16 @@ export default function Overview(): JSX.Element {
                     </View>
                 );
             })}
-            <View style={{ backgroundColor: "silver", padding: 15 }}>
-                { !gameRunning ? 
-                    <Text style={{ alignSelf: "center" }} onPress={() => setGameRunning(true)}>Play</Text> :
-                    <Text style={{ alignSelf: "center" }} onPress={() => setGameRunning(false)}>Pause</Text>}
-            </View>
+            { possession !== 200 ? 
+                <View style={{ backgroundColor: "silver", padding: 15 }}>
+                    { !gameRunning ? 
+                        <Text style={{ alignSelf: "center" }} onPress={() => setGameRunning(true)}>Play</Text> :
+                        <Text style={{ alignSelf: "center" }} onPress={() => setGameRunning(false)}>Pause</Text>}
+                </View> :
+                <View style={{ backgroundColor: "silver", padding: 15 }}>
+                    <Text style={{ alignSelf: "center" }} onPress={() => console.log("Next")}>Next</Text>
+                </View>
+            }
         </>
     );
 }
