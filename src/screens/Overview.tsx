@@ -2,32 +2,46 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ImageBackground } from "react-native";
 import TeamLogo from "../components/GamePage/TeamLogo";
-import { Team } from "../interfaces/Team";
+import { GameData } from "../interfaces/Game";
 import { gameLog } from "../utilities/game/gameLog";
 import { randomNumberGenerator } from "../utilities/randomNumberGenerator";
-import TeamGenerator from "../utilities/testing/teamGenerator";
 
 export default function Overview(): JSX.Element {
-    const [teams, setTeams] = useState<Team[]>(TeamGenerator());
     const [logoSize, setLogoSize] = useState<{ home: number, away: number }>({ home: 45, away: 45 });
     
     const statsList = [
         "FIELD GOALS", "3 POINTERS", "FREE THROWS", "ASSISTS", "REBOUNDS", "STEALS", "BLOCKS", "TURNOVERS"
     ];
 
-    const [scores1, setScores1] = useState<Record<string, number>>({
-        "1": 0,
-        "2": 0,
-        "3": 0,
-        "4": 0,
-        "Total": 0
-    });
-    const [scores2, setScores2] = useState<Record<string, number>>({
-        "1": 0,
-        "2": 0,
-        "3": 0,
-        "4": 0,
-        "Total": 0
+    const [scores1, setScores1] = useState<GameData>({
+        "home": {
+            name: "PHI",
+            pointsTotal: {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "Total": 0
+            },
+            fga: 0,
+            fgm: 0,
+            tpm: 0,
+            tpa: 0,
+        },
+        "away": {
+            name: "NYK",
+            pointsTotal: {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "Total": 0
+            },
+            fga: 0,
+            fgm: 0,
+            tpm: 0,
+            tpa: 0,
+        }
     });
 
     function scoreTeam(home: boolean, logoSizeCopy: { home: number, away: number }) {
@@ -51,7 +65,7 @@ export default function Overview(): JSX.Element {
         if (gameRunning) {
             // create a interval and get the id
             const myInterval = setInterval(() => {
-                let homeScore = false;
+                let homeScore: "home" | "away" = "home";
                 let quarter = 1;
                 setPossession(currPossession => {
                     quarter = Math.floor(currPossession/50)+1;
@@ -59,28 +73,22 @@ export default function Overview(): JSX.Element {
                         setGameRunning(false);
                     }
                     currPossession % 2 ? 
-                        homeScore = true :
-                        homeScore = false;
+                        homeScore = "home" :
+                        homeScore = "away";
 
                     return currPossession + 1;
                 });
-                homeScore ? 
-                    setScores1(currTeamScore => {
-                        const score = randomNumberGenerator(4);
-                        if (score !== 0) {
-                            setLogoSize(currLogoSize => scoreTeam(true, currLogoSize));
-                        }
-                        setGameAction(gameLog(score, "PHI"));
-                        return addScore(currTeamScore, score, quarter);
-                    }) :
-                    setScores2(currTeamScore => {
-                        const score = randomNumberGenerator(4);
-                        if (score !== 0) {
-                            setLogoSize(currLogoSize => scoreTeam(false, currLogoSize));
-                        }
-                        setGameAction(gameLog(score, "NYK"));
-                        return addScore(currTeamScore, score, quarter);
-                    });
+                setScores1(currTeamScore => {
+                    const score = randomNumberGenerator(4);
+                    currTeamScore[homeScore].fga++;
+                    if (score !== 0) {
+                        setLogoSize(currLogoSize => scoreTeam(homeScore === "home", currLogoSize));
+                        currTeamScore[homeScore].fgm++;
+                    }
+                    setGameAction(gameLog(score, currTeamScore[homeScore].name));
+                    currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score, quarter);
+                    return currTeamScore;
+                });
 
             }, 200);
             // clear out the interval using the id when unmounting the component
@@ -114,10 +122,10 @@ export default function Overview(): JSX.Element {
             <View style={{ backgroundColor: "silver", padding: 15 }}>
                 <View style={{ flexDirection: "row", justifyContent: "center" }}>
                     <Text style={{ alignSelf: "center", width: 40, textAlign: "right" }}>PHI: </Text>
-                    {Object.keys(scores1).map((item, index) => {
+                    {Object.keys(scores1.home.pointsTotal).map((item, index) => {
                         return (
                             <View key={index} style={{ flexDirection: "row" }}>
-                                <Text style={{ alignSelf: "center", width: 25, textAlign: "center" }}>{scores1[item]}</Text>
+                                <Text style={{ alignSelf: "center", width: 25, textAlign: "center" }}>{scores1.home.pointsTotal[item]}</Text>
                                 { index !== 4 && <Text style={{ alignSelf: "center" }}> | </Text>}
                             </View>
                         );
@@ -125,10 +133,10 @@ export default function Overview(): JSX.Element {
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "center" }}>
                     <Text style={{ alignSelf: "center", width: 40, textAlign: "right" }}>NYK: </Text>
-                    {Object.keys(scores2).map((item, index) => {
+                    {Object.keys(scores1.home.pointsTotal).map((item, index) => {
                         return (
                             <View key={index} style={{ flexDirection: "row" }}>
-                                <Text style={{ alignSelf: "center", width: 25, textAlign: "center" }} >{scores2[item]}</Text>
+                                <Text style={{ alignSelf: "center", width: 25, textAlign: "center" }} >{scores1.away.pointsTotal[item]}</Text>
                                 { index !== 4 && <Text style={{ alignSelf: "center" }}> | </Text>}
                             </View>
                         );
@@ -143,9 +151,9 @@ export default function Overview(): JSX.Element {
             {statsList.map((item, index) => {
                 return (
                     <View style={{ paddingHorizontal: 20, marginVertical: 10, flexDirection: "row", justifyContent: "space-around" }} key={index}>
-                        <Text style={{ alignSelf: "center", width: 35 }}>{possession}</Text>
+                        <Text style={{ alignSelf: "center", width: 40 }}>{`${scores1.home.fgm}/${scores1.home.fga}`}</Text>
                         <Text style={{ width: 100, textAlign: "center" }}>{item}</Text>
-                        <Text style={{ alignSelf: "center", width: 35, textAlign: "right" }}>{Math.floor(Math.random() * 30)}</Text>
+                        <Text style={{ alignSelf: "center", width: 40, textAlign: "right" }}>{`${scores1.away.fgm}/${scores1.away.fga}`}</Text>
                     </View>
                 );
             })}
