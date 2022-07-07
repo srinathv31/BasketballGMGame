@@ -1,6 +1,7 @@
 // Source Imports
 import React, { useEffect, useState } from "react";
-import { View, Text, ImageBackground } from "react-native";
+import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import PlayButton from "../components/GamePage/PlayButton";
 import TeamLogo from "../components/GamePage/TeamLogo";
 import { GameData } from "../interfaces/Game";
 import { gameLog } from "../utilities/game/gameLog";
@@ -58,8 +59,9 @@ export default function Overview(): JSX.Element {
 
     const [possession, setPossession] = useState<number>(0);
     const [gameRunning, setGameRunning] = useState<boolean>(false);
-
+    const [gameSpeed, setGameSpeed] = useState<number>(1000);
     const [gameAction, setGameAction] = useState<string>("-");
+    const [activeQuarter, setActiveQuarter] = useState<number>(1);
 
     useEffect(() => {
         if (gameRunning) {
@@ -69,6 +71,9 @@ export default function Overview(): JSX.Element {
                 let quarter = 1;
                 setPossession(currPossession => {
                     quarter = Math.floor(currPossession/50)+1;
+                    if (activeQuarter !== quarter) {
+                        setActiveQuarter(quarter);
+                    }
                     if (currPossession === 199) {
                         setGameRunning(false);
                     }
@@ -90,7 +95,7 @@ export default function Overview(): JSX.Element {
                     return currTeamScore;
                 });
 
-            }, 200);
+            }, gameSpeed);
             // clear out the interval using the id when unmounting the component
             return () => clearInterval(myInterval);
         }
@@ -113,8 +118,13 @@ export default function Overview(): JSX.Element {
                     <TeamLogo team="NYK" logoSize={logoSize.away}/>
                 </View>
             </ImageBackground>
-            <View style={{ backgroundColor: "silver", padding: 10 }}>
-                <Text style={{ alignSelf: "center" }}>Q: 1 2 3 4</Text>
+            <View style={{ backgroundColor: "silver", padding: 10, flexDirection: "row", justifyContent: "center" }}>
+                <Text style={[styles.speedButton, { backgroundColor: "transparent" }]}>Q:</Text>
+                {Object.keys(scores1.home.pointsTotal).map((item, idx) => {
+                    return (
+                        <Text key={idx} style={[styles.speedButton, { backgroundColor: ""+activeQuarter === item ? "crimson" : "transparent" }]}>{item !== "Total" && item}</Text>
+                    );
+                })}
             </View>
             <View style={{ padding: 25, borderColor: "black", borderWidth: 1 }}>
                 <Text style={{ alignSelf: "center" }}>{gameAction}</Text>
@@ -157,16 +167,14 @@ export default function Overview(): JSX.Element {
                     </View>
                 );
             })}
-            { possession !== 200 ? 
-                <View style={{ backgroundColor: "silver", padding: 15 }}>
-                    { !gameRunning ? 
-                        <Text style={{ alignSelf: "center" }} onPress={() => setGameRunning(true)}>Play</Text> :
-                        <Text style={{ alignSelf: "center" }} onPress={() => setGameRunning(false)}>Pause</Text>}
-                </View> :
-                <View style={{ backgroundColor: "silver", padding: 15 }}>
-                    <Text style={{ alignSelf: "center" }} onPress={() => console.log("Next")}>Next</Text>
-                </View>
-            }
+            <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} possession={possession} setGameSpeed={setGameSpeed}/>
         </>
     );
 }
+const styles = StyleSheet.create({
+    speedButton: {
+        padding: 5,
+        paddingHorizontal: 10,
+        alignSelf: "center"
+    }
+});
