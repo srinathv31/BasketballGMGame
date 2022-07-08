@@ -25,7 +25,7 @@ export default function Overview(): JSX.Element {
     const shotChartCirclesInit: JSX.Element[] = [];
     const [shotChartCircles, setShotChartCircles] = useState<JSX.Element[]>(shotChartCirclesInit);
 
-    const [scores1, setScores1] = useState<GameData>({
+    const [scoreBoard, setScoreBoard] = useState<GameData>({
         "home": {
             name: "PHI",
             pointsTotal: {
@@ -70,6 +70,7 @@ export default function Overview(): JSX.Element {
 
     const [possession, setPossession] = useState<number>(0);
     const [gameRunning, setGameRunning] = useState<boolean>(false);
+    const [gameFinished, setGameFinished] = useState<boolean>(false);
     const [gameSpeed, setGameSpeed] = useState<number>(1000);
     const [gameAction, setGameAction] = useState<string>("-");
     const [activeQuarter, setActiveQuarter] = useState<number>(1);
@@ -80,23 +81,28 @@ export default function Overview(): JSX.Element {
             // create a interval and get the id
             const myInterval = setInterval(() => {
                 let homeScore: "home" | "away" = "home";
-                let quarter = 1;
                 setPossession(currPossession => {
-                    quarter = Math.floor(currPossession/50)+1;
-                    if (activeQuarter !== quarter) {
-                        setActiveQuarter(quarter);
-                    }
-                    if (currPossession === 199) {
-                        setGameRunning(false);
-                    }
                     currPossession % 2 ? 
                         homeScore = "home" :
                         homeScore = "away";
 
                     return currPossession + 1;
                 });
-                setGameClock(currTime => calculateTimeLeft(currTime));
-                setScores1(currTeamScore => {
+                setGameClock(currTime => {
+                    if (currTime === "00:00"){
+                        setActiveQuarter(currQuarter => {
+                            currQuarter !== 4 ? setGameClock("12:00") : setGameClock("00:00");
+                            if (currTime === "00:00" && currQuarter === 4){
+                                setGameRunning(false);
+                                setGameFinished(true);
+                                return currQuarter;
+                            }
+                            return currQuarter + 1;
+                        });
+                    }
+                    return calculateTimeLeft(currTime);
+                });
+                setScoreBoard(currTeamScore => {
                     const score = playerShotDeterminator(team1.roster[2022]);
                     currTeamScore[homeScore].fga++;
                     if (score.score !== 0) {
@@ -109,7 +115,11 @@ export default function Overview(): JSX.Element {
                         });
                     }
                     setGameAction(gameLog(score.score, currTeamScore[homeScore].name));
-                    currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, quarter);
+                    setActiveQuarter(currQuarter => { 
+                        // Run score function inside of setActiveQuarter to access activeQuarter value 
+                        currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
+                        return currQuarter;
+                    });
                     return currTeamScore;
                 });
 
@@ -118,12 +128,6 @@ export default function Overview(): JSX.Element {
             return () => clearInterval(myInterval);
         }
     }, [gameRunning]);
-
-    useEffect(() => {
-        if (gameClock === "00:00") {
-            setGameClock("12:00");
-        }
-    }, [activeQuarter]);
 
     function addScore(teamScore: Record<number, number>, score: number, quarter: number) {
         const teamScoreCopy = { ...teamScore } as Record<string, number>;
@@ -154,7 +158,7 @@ export default function Overview(): JSX.Element {
             </ImageBackground>
             <View style={{ backgroundColor: "silver", padding: 10, flexDirection: "row", justifyContent: "center" }}>
                 <Text style={[styles.speedButton, { backgroundColor: "transparent" }]}>Q:</Text>
-                {Object.keys(scores1.home.pointsTotal).map((item, idx) => {
+                {Object.keys(scoreBoard.home.pointsTotal).map((item, idx) => {
                     return (
                         <Text key={idx} style={[styles.speedButton, { backgroundColor: ""+activeQuarter === item ? "crimson" : "transparent" }]}>{item !== "Total" && item}</Text>
                     );
@@ -167,10 +171,10 @@ export default function Overview(): JSX.Element {
                 <View>
                     <View style={{ flexDirection: "row", justifyContent: "center" }}>
                         <Text style={{ alignSelf: "center", width: 45, textAlign: "center", fontWeight: "700", backgroundColor: "crimson", color: "white", borderWidth: 2 }}>{`${team1.name}`}</Text>
-                        {Object.keys(scores1.home.pointsTotal).map((item, index) => {
+                        {Object.keys(scoreBoard.home.pointsTotal).map((item, index) => {
                             return (
                                 <View key={index} style={{ flexDirection: "row" }}>
-                                    <Text style={{ alignSelf: "center", width: 25, textAlign: "center", fontWeight: +item === activeQuarter || item === "Total" ? "700" : "300" }}>{scores1.home.pointsTotal[item]}</Text>
+                                    <Text style={{ alignSelf: "center", width: 30, textAlign: "center", fontWeight: item === "Total" ? "700" : (+item === activeQuarter && !gameFinished) ? "700" : "300" }}>{scoreBoard.home.pointsTotal[item]}</Text>
                                     { index !== 4 && <Text style={{ alignSelf: "center" }}> | </Text>}
                                 </View>
                             );
@@ -178,10 +182,10 @@ export default function Overview(): JSX.Element {
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "center" }}>
                         <Text style={{ alignSelf: "center", width: 45, textAlign: "center", fontWeight: "700", backgroundColor: "orangered", color: "white", borderWidth: 2 }}>NYK</Text>
-                        {Object.keys(scores1.home.pointsTotal).map((item, index) => {
+                        {Object.keys(scoreBoard.home.pointsTotal).map((item, index) => {
                             return (
                                 <View key={index} style={{ flexDirection: "row" }}>
-                                    <Text style={{ alignSelf: "center", width: 25, textAlign: "center", fontWeight: +item === activeQuarter || item === "Total" ? "700" : "300" }} >{scores1.away.pointsTotal[item]}</Text>
+                                    <Text style={{ alignSelf: "center", width: 30, textAlign: "center", fontWeight: item === "Total" ? "700" : (+item === activeQuarter && !gameFinished) ? "700" : "300" }} >{scoreBoard.away.pointsTotal[item]}</Text>
                                     { index !== 4 && <Text style={{ alignSelf: "center" }}> | </Text>}
                                 </View>
                             );
@@ -198,13 +202,13 @@ export default function Overview(): JSX.Element {
             {statsList.map((item, index) => {
                 return (
                     <View style={{ paddingHorizontal: 20, marginVertical: 10, flexDirection: "row", justifyContent: "space-around" }} key={index}>
-                        <Text style={{ alignSelf: "center", width: 50 }}>{`${scores1.home.fgm}/${scores1.home.fga}`}</Text>
+                        <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home.fgm}/${scoreBoard.home.fga}`}</Text>
                         <Text style={{ width: 100, textAlign: "center" }}>{item}</Text>
-                        <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scores1.away.fgm}/${scores1.away.fga}`}</Text>
+                        <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away.fgm}/${scoreBoard.away.fga}`}</Text>
                     </View>
                 );
             })}
-            <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} possession={possession} setGameSpeed={setGameSpeed}/>
+            <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} gameFinished={gameFinished} setGameSpeed={setGameSpeed}/>
         </>
     );
 }

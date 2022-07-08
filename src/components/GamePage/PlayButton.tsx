@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default function PlayButton({ possession, gameRunning, setGameRunning, setGameSpeed }: {
-    possession: number,
+export default function PlayButton({ gameFinished, gameRunning, setGameRunning, setGameSpeed }: {
+    gameFinished: boolean,
     gameRunning: boolean, setGameRunning: (g: boolean) => void,
     setGameSpeed: (s: number) => void
 }): JSX.Element {
@@ -36,7 +36,7 @@ export default function PlayButton({ possession, gameRunning, setGameRunning, se
 
     return(
         <>
-            { possession !== 200 ? 
+            { !gameFinished ? 
                 <View style={{ padding: 10 }}>
                     { !gameRunning ? 
                         <View style={{ flexDirection: "row", justifyContent: "center" }}>
