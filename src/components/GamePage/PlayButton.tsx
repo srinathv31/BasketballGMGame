@@ -37,7 +37,7 @@ export default function PlayButton({ possession, gameRunning, setGameRunning, se
     return(
         <>
             { possession !== 200 ? 
-                <View style={{ padding: 15 }}>
+                <View style={{ padding: 10 }}>
                     { !gameRunning ? 
                         <View style={{ flexDirection: "row", justifyContent: "center" }}>
                             <View style={{ flexDirection: "row", position: "absolute", left: 0 }}>

@@ -16,7 +16,7 @@ function playerShotAttemptCalculator() {
 function playerShotSuccessCalculator(player: PlayerObject, shotAttempt: 3 | 2 | 1) {
     const makeChance = randomNumberGenerator(100);
     const playerShotRating = shotAttempt === 3 ? player.offense.threePoint/2 : player.offense.midRange/2;
-    console.log(`${shotAttempt} - ${makeChance}%`);
+    // console.log(`${shotAttempt} - ${makeChance}%`);
     if (makeChance < playerShotRating) {
         return { fga: shotAttempt, score: shotAttempt };
     }
