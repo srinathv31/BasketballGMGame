@@ -1,18 +1,29 @@
 // Source Imports
 import React, { useEffect, useState } from "react";
 import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import Svg, { Circle } from "react-native-svg";
+import FGACircle from "../components/GamePage/FGACircle";
 import PlayButton from "../components/GamePage/PlayButton";
 import TeamLogo from "../components/GamePage/TeamLogo";
 import { GameData } from "../interfaces/Game";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { gameLog } from "../utilities/game/gameLog";
+import { playerShotDeterminator } from "../utilities/game/scoring";
 import { randomNumberGenerator } from "../utilities/randomNumberGenerator";
 
 export default function Overview(): JSX.Element {
+    const teams = useAppSelector(state => state.teamsTracker.value);
+    const dispatch = useAppDispatch();
+
+    const team1 = teams.find(team => team.name === "PHI")!;
+
     const [logoSize, setLogoSize] = useState<{ home: number, away: number }>({ home: 45, away: 45 });
     
-    const statsList = [
-        "FIELD GOALS", "3 POINTERS", "FREE THROWS", "ASSISTS", "REBOUNDS", "STEALS", "BLOCKS", "TURNOVERS"
-    ];
+    const statsList = [ "FIELD GOALS", "3 POINTERS", "FREE THROWS", "STEALS", "BLOCKS", "TURNOVERS" ];
+
+    const shotChartCirclesInit: JSX.Element[] = [];
+
+    const [shotChartCircles, setShotChartCircles] = useState<JSX.Element[]>(shotChartCirclesInit);
 
     const [scores1, setScores1] = useState<GameData>({
         "home": {
@@ -84,14 +95,17 @@ export default function Overview(): JSX.Element {
                     return currPossession + 1;
                 });
                 setScores1(currTeamScore => {
-                    const score = randomNumberGenerator(4);
+                    const score = playerShotDeterminator(team1.roster[2022]);
                     currTeamScore[homeScore].fga++;
-                    if (score !== 0) {
+                    if (score.score !== 0) {
                         setLogoSize(currLogoSize => scoreTeam(homeScore === "home", currLogoSize));
                         currTeamScore[homeScore].fgm++;
                     }
-                    setGameAction(gameLog(score, currTeamScore[homeScore].name));
-                    currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score, quarter);
+                    setShotChartCircles(currShotChart => {
+                        return [ ...currShotChart, <FGACircle key={currShotChart.length} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"}/> ];
+                    });
+                    setGameAction(gameLog(score.score, currTeamScore[homeScore].name));
+                    currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, quarter);
                     return currTeamScore;
                 });
 
@@ -106,16 +120,22 @@ export default function Overview(): JSX.Element {
         const teamScoreCopy = { ...teamScore } as Record<string, number>;
         teamScoreCopy[""+quarter] = teamScoreCopy[""+quarter] + score;
         teamScoreCopy["Total"] = teamScoreCopy["Total"] + score;
-        console.log(teamScoreCopy);
         return teamScoreCopy;
     }
 
     return(
         <>
-            <ImageBackground source={require("../assets/gameScreen/court.png")} style={{ flex: 1 }} >
+            <ImageBackground source={require("../assets/gameScreen/basketballCourt.jpg")} style={{ flex: 1 }} >
                 <View style={{ flex: 1, justifyContent: "space-around", alignItems: "center", flexDirection: "row" }}>
-                    <TeamLogo team="PHI" logoSize={logoSize.home} />
-                    <TeamLogo team="NYK" logoSize={logoSize.away}/>
+                    {/* <TeamLogo team="PHI" logoSize={logoSize.home} />
+                    <TeamLogo team="NYK" logoSize={logoSize.away}/> */}
+                    {shotChartCircles.map((item) => {
+                        return(
+                            <React.Fragment key={item.key}>
+                                { item }
+                            </React.Fragment>
+                        );
+                    })}
                 </View>
             </ImageBackground>
             <View style={{ backgroundColor: "silver", padding: 10, flexDirection: "row", justifyContent: "center" }}>
@@ -126,12 +146,12 @@ export default function Overview(): JSX.Element {
                     );
                 })}
             </View>
-            <View style={{ padding: 25, borderColor: "black", borderWidth: 1 }}>
+            <View style={{ padding: 15, borderColor: "black", borderWidth: 1 }}>
                 <Text style={{ alignSelf: "center" }}>{gameAction}</Text>
             </View>
             <View style={{ backgroundColor: "silver", padding: 15 }}>
                 <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                    <Text style={{ alignSelf: "center", width: 40, textAlign: "right" }}>PHI: </Text>
+                    <Text style={{ alignSelf: "center", width: 40, textAlign: "right" }}>{`${team1.name}: `}</Text>
                     {Object.keys(scores1.home.pointsTotal).map((item, index) => {
                         return (
                             <View key={index} style={{ flexDirection: "row" }}>

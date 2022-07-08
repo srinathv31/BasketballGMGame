@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import indexReducer from "./indexSlice";
+import teamsReducer from "./teamsSlice";
 
 export const store = configureStore({
     reducer: {
-        indexTracker: indexReducer
+        indexTracker: indexReducer,
+        teamsTracker: teamsReducer
     }
 });
 
