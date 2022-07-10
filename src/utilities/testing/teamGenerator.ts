@@ -18,6 +18,7 @@ export default function TeamGenerator() {
             name: team.name,
             conference: "EAST",
             roster: { 2022: playerList },
+            salaryBook: { 2022: calculateSalary(playerList) },
             staff: { 2022: [] },
             owner: {
                 id: teamData.length,
@@ -43,4 +44,8 @@ export default function TeamGenerator() {
     });
     // console.log(teamData);
     return teamData;
+}
+
+function calculateSalary(playerList: PlayerObject[]) {
+    return playerList.reduce((acc, curr) => acc + curr.salary[2022], 0);
 }

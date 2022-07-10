@@ -8,6 +8,7 @@ export interface Team {
     name: string,
     conference: "EAST" | "WEST",
     roster: Record<number, PlayerObject[]>,
+    salaryBook: Record<number, number>,
     staff: Record<number, Coach[]>,
     owner: Owner,
     overall: number,
