@@ -2,11 +2,12 @@
 import React from "react";
 import { View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
+import { ShotAttempt } from "../../interfaces/Game";
 import { randomNumberGenerator } from "../../utilities/randomNumberGenerator";
 
 export default function FGACircle({ fgm, fgtype, teamColor, home }: {
     fgm: boolean,
-    fgtype: number,
+    fgtype: ShotAttempt,
     teamColor: string,
     home: boolean
 }): JSX.Element {
@@ -17,12 +18,12 @@ export default function FGACircle({ fgm, fgtype, teamColor, home }: {
     return(
         <>
             { home ? 
-                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: fgtype === 3 ? threePointParameters.x : twoPointParameters.x, bottom: fgtype === 3 ? threePointParameters.y : twoPointParameters.y }}>
+                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: fgtype === "threePoint" ? threePointParameters.x : twoPointParameters.x, bottom: fgtype === "threePoint" ? threePointParameters.y : twoPointParameters.y }}>
                     <Svg height="100" width="100" style={{ position: "absolute" }}>
                         <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={"black"} strokeWidth={3}  />
                     </Svg>
                 </View> :
-                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", right: fgtype === 3 ? threePointParameters.x : twoPointParameters.x, bottom: fgtype === 3 ? threePointParameters.y : twoPointParameters.y }}>
+                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", right: fgtype === "threePoint" ? threePointParameters.x : twoPointParameters.x, bottom: fgtype === "threePoint" ? threePointParameters.y : twoPointParameters.y }}>
                     <Svg height="100" width="100" style={{ position: "absolute" }}>
                         <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={"black"} strokeWidth={3}  />
                     </Svg>

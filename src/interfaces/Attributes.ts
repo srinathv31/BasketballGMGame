@@ -23,17 +23,17 @@ interface PlayerMentalRatings {
 }
 
 interface OffensivePlayerSkillRatings {
-    close: number,
-    midRange: number,
-    threePoint: number,
-    freeThrow: number,
-    layup: number,
-    dunk: number,
-    postFade: number,
-    drawFoul: number,
-    ballHandle: number,
-    passing: number,
-    categoryWeight?: number
+    "close": number,
+    "midRange": number,
+    "threePoint": number,
+    "freeThrow": number,
+    "layup": number,
+    "dunk": number,
+    "postFade": number,
+    "drawFoul": number,
+    "ballHandle": number,
+    "passing": number,
+    "categoryWeight"?: number
 }
 
 interface DefensivePlayerSkillRatings {

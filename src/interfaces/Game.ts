@@ -22,3 +22,5 @@ interface TeamGameData {
     tpa: number,
     tpm: number
 }
+
+export type ShotAttempt = "layup" | "dunk" | "close" | "midRange" | "threePoint";
