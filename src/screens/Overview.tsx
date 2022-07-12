@@ -103,7 +103,7 @@ export default function Overview(): JSX.Element {
                     return calculateTimeLeft(currTime);
                 });
                 setScoreBoard(currTeamScore => {
-                    const score = playerShotDeterminator(team1.roster[2022]);
+                    const score = playerShotDeterminator(Object.values(team1.rosters[2022]));
                     currTeamScore[homeScore].fga++;
                     if (score.score !== 0) {
                         setLogoSize(currLogoSize => scoreTeam(homeScore === "home", currLogoSize));

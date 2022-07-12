@@ -7,7 +7,7 @@ export interface Team {
     id: number,
     name: string,
     conference: "EAST" | "WEST",
-    roster: Record<number, PlayerObject[]>,
+    rosters: Record<number, Roster>,
     salaryBook: Record<number, number>,
     staff: Record<number, Coach[]>,
     owner: Owner,
@@ -20,6 +20,9 @@ export interface Team {
     playoffStatus: "Lottery Team" | "Playoff Team" | "Contenders",
     schedule?: Record<number, Game>,
 }
+
+// 1-5 starting positions, > 5 priority in bench rotation
+export type Roster = Record<number, PlayerObject>;
 
 type SeasonOutcome = "Missed Playoffs" | "First Round" | "Second Round" | "Conference Finals" | "Finals" | "Champions";
 

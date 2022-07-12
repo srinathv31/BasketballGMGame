@@ -5,20 +5,17 @@ import playerGenerator from "./playerGenerator";
 
 export default function TeamGenerator() {
     const teamData: Team[] = [];
-    const playerList: PlayerObject[] = [];
+    const playerList = playerGenerator();
 
     const teamList = [{ name: "PHI", conference: "EAST" }, { name: "NYK", conference: "EAST" }];
-    for (let i=0;i<5;i++){
-        playerList.push(playerGenerator());
-    }
 
     teamList.forEach(team => {
         const newTeam: Team = {
             id: teamData.length,
             name: team.name,
             conference: "EAST",
-            roster: { 2022: playerList },
-            salaryBook: { 2022: calculateSalary(playerList) },
+            rosters: { 2022: playerList },
+            salaryBook: { 2022: calculateSalary(Object.values(playerList)) },
             staff: { 2022: [] },
             owner: {
                 id: teamData.length,
