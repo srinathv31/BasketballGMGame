@@ -1,5 +1,6 @@
 import { PlayerObject } from "../../interfaces/Player";
 import { Roster } from "../../interfaces/Team";
+import { generateNewPlayer } from "../draft/draftClassGenerator";
 
 export default function playerGenerator() {
     const playerList: Roster = {
@@ -7,7 +8,8 @@ export default function playerGenerator() {
         2: sgGenerator(),
         3: sfGenerator(),
         4: pfGenerator(),
-        5: cGenerator()
+        5: cGenerator(),
+        ...generateTestPlayers()
     };
     return playerList;
 }
@@ -295,6 +297,14 @@ function cGenerator() {
         ambition: "HIGH"
     };
     return newPlayer;
+}
+
+function generateTestPlayers() {
+    const playerList: Roster = {};
+    for (let i=6;i<13;i++){
+        playerList[i] = generateNewPlayer(i);
+    }
+    return playerList;
 }
 
 function createPlayerBackground() {

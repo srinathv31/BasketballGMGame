@@ -18,7 +18,7 @@ export default function Starters(): JSX.Element {
             </View>
             {playerList.map((item, index) => {
                 return(
-                    <PlayerRosterCard player={item} index={index} key={index}/>
+                    index < 5 && <PlayerRosterCard player={item} index={index} key={index}/>
                 );
             })}
         </>

@@ -1,22 +1,14 @@
 // Source Imports
 import React from "react";
 import { View, Text } from "react-native";
-import { PlayerObject } from "../../interfaces/Player";
-import { generateNewPlayer } from "../../utilities/draft/draftClassGenerator";
+import { useAppSelector } from "../../redux/hooks";
 import Divider from "../Design/Divider";
 import PlayerRosterCard from "./PlayerRosterCard";
 
 export default function Bench(): JSX.Element {
+    const teams = useAppSelector(state => state.teamsTracker.value);
 
-    function generateTestPlayers() {
-        const playerList: PlayerObject[] = [];
-        for (let i=0;i<8;i++){
-            playerList.push(generateNewPlayer(playerList.length));
-        }
-        return playerList;
-    }
-
-    const playerList = generateTestPlayers();
+    const playerList = Object.values(teams[0].rosters[2022]);
 
     return(
         <>
@@ -26,7 +18,7 @@ export default function Bench(): JSX.Element {
             </View>
             {playerList.map((item, index) => {
                 return(
-                    <PlayerRosterCard player={item} index={index} bench={true} key={index} />
+                    index > 4 && <PlayerRosterCard player={item} index={index} bench={true} key={index} />
                 );
             })}
         </>
