@@ -6,6 +6,7 @@ import FGACircle from "../components/GamePage/FGACircle";
 import PlayButton from "../components/GamePage/PlayButton";
 import ReferencePoints from "../components/GamePage/ReferencePoints";
 import TeamLogo from "../components/GamePage/TeamLogo";
+import TeamStats from "../components/GamePage/TeamStats";
 import { GameData } from "../interfaces/Game";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { calculateTimeLeft } from "../utilities/game/clock";
@@ -192,20 +193,7 @@ export default function Overview(): JSX.Element {
                 </View>
                 <Text style={{ alignSelf: "center", marginLeft: 10, width: 50, textAlign: "center", fontWeight: "700", backgroundColor: "crimson", color: "white", borderWidth: 2 }}>{gameClock}</Text>
             </View>
-            <View style={{ padding: 20, flexDirection: "row", justifyContent: "space-around" }}>
-                <Text style={{ alignSelf: "center", width: 50, fontWeight: "700" }}>PHI</Text>
-                <Text style={{ alignSelf: "center", width: 100, textAlign: "center" }}>STATS</Text>
-                <Text style={{ alignSelf: "center", width: 50, textAlign: "right", fontWeight: "700" }}>NYK</Text>
-            </View>
-            {statsList.map((item, index) => {
-                return (
-                    <View style={{ paddingHorizontal: 20, marginVertical: 10, flexDirection: "row", justifyContent: "space-around" }} key={index}>
-                        <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home.fgm}/${scoreBoard.home.fga}`}</Text>
-                        <Text style={{ width: 100, textAlign: "center" }}>{item}</Text>
-                        <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away.fgm}/${scoreBoard.away.fga}`}</Text>
-                    </View>
-                );
-            })}
+            <TeamStats scoreBoard={scoreBoard}/>
             <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} gameFinished={gameFinished} setGameSpeed={setGameSpeed}/>
         </>
     );
