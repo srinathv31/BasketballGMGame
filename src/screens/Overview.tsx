@@ -156,18 +156,7 @@ export default function Overview(): JSX.Element {
                     {/* <ReferencePoints /> */}
                 </View>
             </ImageBackground>
-            <View style={{ backgroundColor: "silver", padding: 10, flexDirection: "row", justifyContent: "center" }}>
-                <Text style={[styles.speedButton, { backgroundColor: "transparent" }]}>Q:</Text>
-                {Object.keys(scoreBoard.home.pointsTotal).map((item, idx) => {
-                    return (
-                        <Text key={idx} style={[styles.speedButton, { backgroundColor: ""+activeQuarter === item ? "crimson" : "transparent" }]}>{item !== "Total" && item}</Text>
-                    );
-                })}
-            </View>
-            <View style={{ padding: 15, borderColor: "black", borderWidth: 1 }}>
-                <Text style={{ alignSelf: "center" }}>{gameAction}</Text>
-            </View>
-            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} team1={team1} />
+            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameAction} team1={team1} />
             <TeamStats scoreBoard={scoreBoard}/>
             <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} gameFinished={gameFinished} setGameSpeed={setGameSpeed}/>
         </>
