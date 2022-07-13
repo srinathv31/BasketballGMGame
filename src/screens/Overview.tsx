@@ -1,9 +1,10 @@
 // Source Imports
 import React, { useEffect, useState } from "react";
-import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import FGACircle from "../components/GamePage/FGACircle";
 import PlayButton from "../components/GamePage/PlayButton";
+import ReferencePoints from "../components/GamePage/ReferencePoints";
 import TeamLogo from "../components/GamePage/TeamLogo";
 import { GameData } from "../interfaces/Game";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -103,7 +104,7 @@ export default function Overview(): JSX.Element {
                     return calculateTimeLeft(currTime);
                 });
                 setScoreBoard(currTeamScore => {
-                    const score = playerShotDeterminator(Object.values(team1.rosters[2022]));
+                    const score = playerShotDeterminator(Object.values(team1.rosters[2022]).filter((item, idx) => idx < 5));
                     currTeamScore[homeScore].fga++;
                     if (score.score !== 0) {
                         setLogoSize(currLogoSize => scoreTeam(homeScore === "home", currLogoSize));
@@ -111,10 +112,10 @@ export default function Overview(): JSX.Element {
                     }
                     if (score.score !== 1) {
                         setShotChartCircles(currShotChart => {
-                            return [ ...currShotChart, <FGACircle key={currShotChart.length} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"}/> ];
+                            return [ ...currShotChart, <FGACircle key={currShotChart.length} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"} /> ];
                         });
                     }
-                    setGameAction(gameLog(score.score, currTeamScore[homeScore].name));
+                    setGameAction(gameLog(score.score, currTeamScore[homeScore].name, score.fga, score.player!));
                     setActiveQuarter(currQuarter => { 
                         // Run score function inside of setActiveQuarter to access activeQuarter value 
                         currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
@@ -149,11 +150,8 @@ export default function Overview(): JSX.Element {
                             </React.Fragment>
                         );
                     })}
-                    {/* <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 165, bottom: 45 }}>
-                        <Svg height="100" width="100" style={{ position: "absolute" }}>
-                            <Circle cx="50" cy="50" r="5" fill={"crimson"} stroke={"black"} strokeWidth={3}  />
-                        </Svg>
-                    </View> */}
+                    
+                    {/* <ReferencePoints /> */}
                 </View>
             </ImageBackground>
             <View style={{ backgroundColor: "silver", padding: 10, flexDirection: "row", justifyContent: "center" }}>

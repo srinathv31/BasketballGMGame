@@ -1,20 +1,22 @@
-import { randomNumberGenerator } from "../randomNumberGenerator";
+import { ShotAttempt } from "../../interfaces/Game";
 
-export function gameLog(score: number, team: string) {
+export function gameLog(score: number, team: string, fga: ShotAttempt, playerName: string) {
     
-    const twoPointAttempts = [ 
-        "Layup is good by", "Mid-range shot by"
-    ];
+    if (score === 0) {
+        return `Shot missed by ${playerName} - ${team}`;
+    }
 
-    switch (score) {
-        case 0:
-            return `Shot missed by ${team}`;
-        case 1:
-            return `Free throw from ${team}`;
-        case 2:
-            return `${twoPointAttempts[randomNumberGenerator(twoPointAttempts.length)]} ${team}`;
-        case 3:
-            return `3 Pointer from ${team}`;
+    switch (fga) {
+        case "close":
+            return `Hook shot by ${playerName} - ${team}`;
+        case "midRange":
+            return `Mid-range shot by ${playerName} - ${team}`;
+        case "dunk":
+            return `Slam from ${playerName} - ${team}`;
+        case "layup":
+            return `Layup is good by ${playerName} - ${team}`;
+        case "threePoint":
+            return `Three Pointer from ${playerName} - ${team}`;
         default:
             return `Shot Missed by ${team}`;
     }
