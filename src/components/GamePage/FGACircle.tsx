@@ -5,23 +5,24 @@ import Svg, { Circle } from "react-native-svg";
 import { ShotAttempt } from "../../interfaces/Game";
 import { circleEquation } from "../../utilities/game/shotChartGenerator";
 
-export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameters }: {
+export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameters, player }: {
     fgm: boolean,
     fgtype: ShotAttempt,
     teamColor: string,
     home: boolean,
-    pointParameters: { x: number, y: number }
+    pointParameters: { x: number, y: number },
+    player: string
 }): JSX.Element {
     return(
         <>
             { home ? 
-                <TouchableOpacity onPress={() => circleEquation(pointParameters.x, pointParameters.y, fgtype)}
+                <TouchableOpacity onPress={() => circleEquation(pointParameters.x, pointParameters.y, fgtype, player)}
                     style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: pointParameters.x, bottom: pointParameters.y }}>
                     <Svg height="100" width="100" style={{ position: "absolute" }}>
                         <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={"black"} strokeWidth={3}  />
                     </Svg>
                 </TouchableOpacity> :
-                <TouchableOpacity onPress={() => circleEquation(pointParameters.x, pointParameters.y, fgtype)} 
+                <TouchableOpacity onPress={() => circleEquation(pointParameters.x, pointParameters.y, fgtype, player)} 
                     style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", right: pointParameters.x, bottom: pointParameters.y }}>
                     <Svg height="100" width="100" style={{ position: "absolute" }}>
                         <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={"black"} strokeWidth={3}  />

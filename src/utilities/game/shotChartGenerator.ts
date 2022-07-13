@@ -24,9 +24,9 @@ export function createPointParameters(fgtype: ShotAttempt): { x: number, y: numb
     return pointParametersCopy;
 }
 
-export function circleEquation(x: number, y: number, fgtype: ShotAttempt) {
+export function circleEquation(x: number, y: number, fgtype: ShotAttempt, player: string) {
     console.log(isInside(35, 100, 100, x, y));
-    console.log(fgtype);
+    console.log(`${player}: ${fgtype}`);
 }
 
 function isInside(circle_x: number, circle_y: number, rad: number, x: number, y: number) {
