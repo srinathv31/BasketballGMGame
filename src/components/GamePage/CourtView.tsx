@@ -1,6 +1,7 @@
 // Source Imports
 import React from "react";
 import { ImageBackground, View } from "react-native";
+import ReferencePoints from "./ReferencePoints";
 
 export default function CourtView({ shotChartCircles }: {
     shotChartCircles: JSX.Element[]

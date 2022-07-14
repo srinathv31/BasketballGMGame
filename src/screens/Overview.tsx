@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import Svg, { Circle } from "react-native-svg";
+import { Route, TabView } from "react-native-tab-view";
+import BoxScore from "../components/GamePage/BoxScore";
 import CourtView from "../components/GamePage/CourtView";
 import FGACircle from "../components/GamePage/FGACircle";
 import PlayButton from "../components/GamePage/PlayButton";
@@ -140,11 +142,40 @@ export default function Overview(): JSX.Element {
         return teamScoreCopy;
     }
 
+    const [index, setIndex] = useState<number>(0);
+    const [routes] = useState([
+        { key: "cal", title: "Team Stats" },
+        { key: "home", title: "Box Score" },
+
+    ]);
+
+    const renderScene = ({ route }: {
+        route: Route
+    }) => {
+        switch (route.key) {
+            case "cal":
+                return <TeamStats scoreBoard={scoreBoard} />;
+            case "home":
+                return <BoxScore />;
+            default:
+                return null;
+        }
+    };
+    
     return(
         <>
             <CourtView shotChartCircles={shotChartCircles}/>
             <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameAction} team1={team1} />
             <TeamStats scoreBoard={scoreBoard}/>
+            {/* <View style={{ flex: 1.2, height: 30 }}>
+                <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene}
+                    onIndexChange={setIndex}
+                    tabBarPosition="bottom"
+                    renderTabBar={() => null}
+                />
+            </View> */}
             <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} gameFinished={gameFinished} setGameSpeed={setGameSpeed}/>
         </>
     );
