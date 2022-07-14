@@ -115,7 +115,7 @@ export default function Overview(): JSX.Element {
                     if (score.score !== 1) {
                         setShotChartCircles(currShotChart => {
                             const pointParameters = createPointParameters(score.fga);
-                            return [ ...currShotChart, <FGACircle key={currShotChart.length} pointParameters={pointParameters} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"} /> ];
+                            return [ ...currShotChart, <FGACircle key={currShotChart.length} pointParameters={pointParameters} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"} player={score.player} /> ];
                         });
                     }
                     setGameAction(gameLog(score.score, currTeamScore[homeScore].name, score.fga, score.player!));
