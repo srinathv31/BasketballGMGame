@@ -166,8 +166,8 @@ export default function Overview(): JSX.Element {
         <>
             <CourtView shotChartCircles={shotChartCircles}/>
             <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameAction} team1={team1} />
-            <TeamStats scoreBoard={scoreBoard}/>
-            {/* <View style={{ flex: 1.2, height: 30 }}>
+            {/* <TeamStats scoreBoard={scoreBoard}/> */}
+            <View style={{ flex: 1.2, height: 30 }}>
                 <TabView
                     navigationState={{ index, routes }}
                     renderScene={renderScene}
@@ -175,7 +175,7 @@ export default function Overview(): JSX.Element {
                     tabBarPosition="bottom"
                     renderTabBar={() => null}
                 />
-            </View> */}
+            </View>
             <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} gameFinished={gameFinished} setGameSpeed={setGameSpeed}/>
         </>
     );

@@ -2,12 +2,12 @@ import { ShotAttempt } from "../../interfaces/Game";
 import { randomNumberGenerator } from "../randomNumberGenerator";
 
 export function createPointParameters(fgtype: ShotAttempt): { x: number, y: number } {
-    const xParameter = randomNumberGenerator(165, 20);
-    const yParameter = randomNumberGenerator(195, 5);
-    if (fgtype === "threePoint" && isInside(35, 100, 100, xParameter, yParameter) === true) {
+    const xParameter = randomNumberGenerator(150, 20);
+    const yParameter = randomNumberGenerator(220, 20);
+    if (fgtype === "threePoint" && isInside(40, 120, 100, xParameter, yParameter) === true) {
         return createPointParameters(fgtype);
     }
-    if (fgtype !== "threePoint" && isInside(35, 107, 100, xParameter, yParameter) === false) {
+    if (fgtype !== "threePoint" && isInside(40, 120, 100, xParameter, yParameter) === false) {
         return createPointParameters(fgtype);
     }
     if (fgtype === "midRange" && checkMidRange(xParameter, yParameter) === false) {
@@ -17,7 +17,7 @@ export function createPointParameters(fgtype: ShotAttempt): { x: number, y: numb
         return createPointParameters(fgtype);
     }
     if (fgtype === "dunk") {
-        const pointParametersCopy = { x: randomNumberGenerator(50, 40), y: randomNumberGenerator(115, 100) };
+        const pointParametersCopy = { x: randomNumberGenerator(50, 40), y: randomNumberGenerator(130, 110) };
         return pointParametersCopy;
     }
     const pointParametersCopy = { x: xParameter, y: yParameter };
@@ -25,7 +25,7 @@ export function createPointParameters(fgtype: ShotAttempt): { x: number, y: numb
 }
 
 export function circleEquation(x: number, y: number, fgtype: ShotAttempt, player: string) {
-    console.log(isInside(35, 100, 100, x, y));
+    console.log(isInside(40, 120, 100, x, y));
     console.log(`${player}: ${fgtype}`);
 }
 
@@ -35,7 +35,7 @@ function isInside(circle_x: number, circle_y: number, rad: number, x: number, y:
     // distance of its center from
     // given point
  
-    if (Math.pow(x - circle_x, 2) + (Math.pow(y - circle_y, 2)*1.3) <= Math.pow(rad, 2)) {
+    if (Math.pow(x - circle_x, 2) + (Math.pow(y - circle_y, 2)*1.22) < Math.pow(rad, 2)) {
         return true;
     } else {
         return false;
@@ -43,8 +43,8 @@ function isInside(circle_x: number, circle_y: number, rad: number, x: number, y:
 }
 
 function checkMidRange(x: number, y: number) {
-    if (y > 80 && y < 135) {
-        if (x > 70) {
+    if (y > 95 && y < 145) {
+        if (x > 80) {
             return true;
         }
         return false;

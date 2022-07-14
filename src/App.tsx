@@ -62,7 +62,7 @@ const App = () => {
                     onIndexChange={(index) => dispatch(setByValue(index))}
                     initialLayout={{ width: layout.width }}
                     tabBarPosition="bottom"
-                    renderTabBar={() => <BottomMenuTab />}
+                    renderTabBar={() => index !== 0 && <BottomMenuTab />}
                 />
             </SafeAreaView>
         </>

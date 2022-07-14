@@ -25,79 +25,79 @@ export default function ReferencePoints(): JSX.Element {
     return(
         <>
             <TouchableOpacity onPress={() => circleEquation(35, 195)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 35, bottom: 20 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 35, bottom: 30 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"blue"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 170)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 100, bottom: 40 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 100, bottom: 45 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"blue"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 170)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 100, bottom: 175 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 100, bottom: 195 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"blue"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(35, 195)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 135, bottom: 107 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 140, bottom: 120 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"blue"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", right: 20, bottom: 210 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 60, bottom: 210 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"blue"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 35, bottom: 195 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 35, bottom: 210 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"blue"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 70, bottom: 135 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 80, bottom: 145 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"yellow"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 70, bottom: 80 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 80, bottom: 95 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"yellow"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 20, bottom: 80 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 20, bottom: 95 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"yellow"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 20, bottom: 135 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 20, bottom: 145 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"yellow"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 40, bottom: 115 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 40, bottom: 130 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"lime"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 40, bottom: 100 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 40, bottom: 110 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"lime"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => circleEquation(100, 30)}
-                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 50, bottom: 107 }}>
+                style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: 50, bottom: 120 }}>
                 <Svg height="100" width="100" style={{ position: "absolute" }}>
                     <Circle cx="50" cy="50" r="5" fill={"lime"} stroke={"black"} strokeWidth={1}  />
                 </Svg>
