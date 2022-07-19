@@ -17,10 +17,11 @@ export interface GameData {
 interface TeamGameData {
     name: string,
     pointsTotal: Record<string, number>,
-    fga: number,
-    fgm: number,
-    tpa: number,
-    tpm: number
+    "fga": number,
+    "fgm": number,
+    "tpa": number,
+    "tpm": number,
+    "biggestLead": number
 }
 
 export type ShotAttempt = "layup" | "dunk" | "close" | "midRange" | "threePoint";

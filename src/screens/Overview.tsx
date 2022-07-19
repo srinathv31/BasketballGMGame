@@ -39,10 +39,11 @@ export default function Overview(): JSX.Element {
                 "4": 0,
                 "Total": 0
             },
-            fga: 0,
-            fgm: 0,
-            tpm: 0,
-            tpa: 0,
+            "fga": 0,
+            "fgm": 0,
+            "tpm": 0,
+            "tpa": 0,
+            "biggestLead": 0
         },
         "away": {
             name: "NYK",
@@ -53,10 +54,11 @@ export default function Overview(): JSX.Element {
                 "4": 0,
                 "Total": 0
             },
-            fga: 0,
-            fgm: 0,
-            tpm: 0,
-            tpa: 0,
+            "fga": 0,
+            "fgm": 0,
+            "tpm": 0,
+            "tpa": 0,
+            "biggestLead": 0
         }
     });
 
@@ -126,6 +128,10 @@ export default function Overview(): JSX.Element {
                     setActiveQuarter(currQuarter => { 
                         // Run score function inside of setActiveQuarter to access activeQuarter value 
                         currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
+                        const leadOverOpp = currTeamScore[homeScore].pointsTotal["Total"] - currTeamScore[homeScore === "home" ? "away" : "home"].pointsTotal["Total"];
+                        if (leadOverOpp > currTeamScore[homeScore].biggestLead) {
+                            currTeamScore[homeScore].biggestLead = leadOverOpp;
+                        }
                         return currQuarter;
                     });
                     return currTeamScore;

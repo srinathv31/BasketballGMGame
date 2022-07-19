@@ -7,7 +7,20 @@ export default function TeamStats({ scoreBoard }: {
     scoreBoard: GameData
 }): JSX.Element {
     
-    const statsList = [ "FIELD GOALS", "3 POINTERS", "FREE THROWS", "REBOUNDS", "TURNOVERS", "BIGGEST LEAD" ];
+    interface StatLabel {
+        label: string,
+        statKey: "fgm" | "fga" | "tpm" | "tpa" | "biggestLead",
+        statKeyAtt?: "fgm" | "fga" | "tpm" | "tpa" | "biggestLead"
+    }
+
+    const statsList: StatLabel[] = [ 
+        { label: "FIELD GOALS", statKey: "fgm", statKeyAtt: "fga" }, 
+        { label: "3 POINTERS", statKey: "tpm", statKeyAtt: "tpa" }, 
+        { label: "FREE THROWS", statKey: "fgm", statKeyAtt: "fga" }, 
+        { label: "REBOUNDS", statKey: "fgm" }, 
+        { label: "TURNOVERS", statKey: "fgm" }, 
+        { label: "BIGGEST LEAD", statKey: "biggestLead" } 
+    ];
 
     return(
         <>
@@ -19,14 +32,14 @@ export default function TeamStats({ scoreBoard }: {
             {statsList.map((item, index) => {
                 return (
                     <View style={{ paddingHorizontal: 20, marginVertical: 10, flexDirection: "row", justifyContent: "space-around" }} key={index}>
-                        { item !== "3 POINTERS"
-                            ? <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home.fgm}/${scoreBoard.home.fga}`}</Text>
-                            : <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home.tpm}/${scoreBoard.home.tpa}`}</Text>
+                        { item.statKeyAtt !== undefined
+                            ? <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home[item.statKey]}/${scoreBoard.home[item.statKeyAtt]}`}</Text>
+                            : <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home[item.statKey]}`}</Text>
                         }
-                        <Text style={{ width: 100, textAlign: "center" }}>{item}</Text>
-                        { item !== "3 POINTERS"
-                            ? <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away.fgm}/${scoreBoard.away.fga}`}</Text>
-                            : <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away.tpm}/${scoreBoard.away.tpa}`}</Text>
+                        <Text style={{ width: 100, textAlign: "center" }}>{item.label}</Text>
+                        { item.statKeyAtt !== undefined
+                            ? <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away[item.statKey]}/${scoreBoard.away[item.statKeyAtt]}`}</Text>
+                            : <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away[item.statKey]}`}</Text>
                         }
                     </View>
                 );
