@@ -109,9 +109,11 @@ export default function Overview(): JSX.Element {
                 setScoreBoard(currTeamScore => {
                     const score = playerShotDeterminator(Object.values(team1.rosters[2022]).filter((item, idx) => idx < 5));
                     currTeamScore[homeScore].fga++;
+                    score.fga === "threePoint" && currTeamScore[homeScore].tpa++;
                     if (score.score !== 0) {
                         // setLogoSize(currLogoSize => scoreTeam(homeScore === "home", currLogoSize, score.score));
                         currTeamScore[homeScore].fgm++;
+                        score.fga === "threePoint" && currTeamScore[homeScore].tpm++;
                     }
                     if (score.score !== 1) {
                         setShotChartCircles(currShotChart => {

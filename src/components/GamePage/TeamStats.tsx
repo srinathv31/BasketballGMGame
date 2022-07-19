@@ -7,7 +7,7 @@ export default function TeamStats({ scoreBoard }: {
     scoreBoard: GameData
 }): JSX.Element {
     
-    const statsList = [ "FIELD GOALS", "3 POINTERS", "FREE THROWS", "STEALS", "BLOCKS", "TURNOVERS" ];
+    const statsList = [ "FIELD GOALS", "3 POINTERS", "FREE THROWS", "REBOUNDS", "TURNOVERS", "BIGGEST LEAD" ];
 
     return(
         <>
@@ -19,9 +19,15 @@ export default function TeamStats({ scoreBoard }: {
             {statsList.map((item, index) => {
                 return (
                     <View style={{ paddingHorizontal: 20, marginVertical: 10, flexDirection: "row", justifyContent: "space-around" }} key={index}>
-                        <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home.fgm}/${scoreBoard.home.fga}`}</Text>
+                        { item !== "3 POINTERS"
+                            ? <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home.fgm}/${scoreBoard.home.fga}`}</Text>
+                            : <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home.tpm}/${scoreBoard.home.tpa}`}</Text>
+                        }
                         <Text style={{ width: 100, textAlign: "center" }}>{item}</Text>
-                        <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away.fgm}/${scoreBoard.away.fga}`}</Text>
+                        { item !== "3 POINTERS"
+                            ? <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away.fgm}/${scoreBoard.away.fga}`}</Text>
+                            : <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away.tpm}/${scoreBoard.away.tpa}`}</Text>
+                        }
                     </View>
                 );
             })}
