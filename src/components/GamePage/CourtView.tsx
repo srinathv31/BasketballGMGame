@@ -11,7 +11,7 @@ export default function CourtView({ shotChartCircles }: {
             <View style={{ flex: 1, justifyContent: "space-around", alignItems: "center", flexDirection: "row" }}>
                 {/* <TeamLogo team="PHI" logoSize={40} />
                 <TeamLogo team="NYK" logoSize={40}/> */}
-                {shotChartCircles.filter(item => item.props["player"] === "Paolo Banchero").map((item) => {
+                {shotChartCircles.map((item) => {
                     return(
                         <React.Fragment key={item.key}>
                             { item }

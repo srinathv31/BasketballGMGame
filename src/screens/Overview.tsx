@@ -26,10 +26,9 @@ export default function Overview(): JSX.Element {
     const team1 = teams.find(team => team.name === "PHI")!;
 
     // const [logoSize, setLogoSize] = useState<{ home: number, away: number }>({ home: 45, away: 45 });
-    
-    const shotChartCirclesInit: JSX.Element[] = [];
-    const [shotChartCircles, setShotChartCircles] = useState<JSX.Element[]>(shotChartCirclesInit);
 
+    const [shotChartCircles, setShotChartCircles] = useState<JSX.Element[]>([]);
+    
     const [scoreBoard, setScoreBoard] = useState<GameData>({
         "home": {
             name: "PHI",
@@ -117,6 +116,7 @@ export default function Overview(): JSX.Element {
                     if (score.score !== 1) {
                         setShotChartCircles(currShotChart => {
                             const pointParameters = createPointParameters(score.fga);
+                            // console.log(pointParameters);
                             return [ ...currShotChart, <FGACircle key={currShotChart.length} pointParameters={pointParameters} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"} player={score.player} /> ];
                         });
                     }
