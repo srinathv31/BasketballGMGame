@@ -1,15 +1,12 @@
 // Source Imports
 import React, { useEffect, useState } from "react";
-import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
-import Svg, { Circle } from "react-native-svg";
+import { View } from "react-native";
 import { Route, TabView } from "react-native-tab-view";
 import BoxScore from "../components/GamePage/BoxScore";
 import CourtView from "../components/GamePage/CourtView";
 import FGACircle from "../components/GamePage/FGACircle";
 import PlayButton from "../components/GamePage/PlayButton";
-import ReferencePoints from "../components/GamePage/ReferencePoints";
 import Scoreboard from "../components/GamePage/Scoreboard";
-import TeamLogo from "../components/GamePage/TeamLogo";
 import TeamStats from "../components/GamePage/TeamStats";
 import { GameData } from "../interfaces/Game";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -17,7 +14,6 @@ import { calculateTimeLeft } from "../utilities/game/clock";
 import { gameLog } from "../utilities/game/gameLog";
 import { playerShotDeterminator } from "../utilities/game/scoring";
 import { createPointParameters } from "../utilities/game/shotChartGenerator";
-import { randomNumberGenerator } from "../utilities/randomNumberGenerator";
 
 export default function Overview(): JSX.Element {
     const teams = useAppSelector(state => state.teamsTracker.value);
