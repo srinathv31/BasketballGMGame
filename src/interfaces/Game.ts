@@ -1,5 +1,4 @@
 import { Team } from "./Team";
-
 export interface Game {
     home: Team,
     away: Team,
@@ -21,7 +20,21 @@ interface TeamGameData {
     "fgm": number,
     "tpa": number,
     "tpm": number,
-    "biggestLead": number
+    "biggestLead": number,
+    boxScore: BoxScore
 }
 
 export type ShotAttempt = "layup" | "dunk" | "close" | "midRange" | "threePoint";
+
+export interface BoxScore {
+    [playerID: number]: {
+        "MIN": number,
+        "PTS": number,
+        "REB": number,
+        "AST": number,
+        "BLK": number,
+        "STL": number,
+        "TO": number,
+        "PF": number
+    }
+}

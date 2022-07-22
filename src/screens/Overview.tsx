@@ -12,6 +12,7 @@ import { GameData } from "../interfaces/Game";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { calculateTimeLeft } from "../utilities/game/clock";
 import { gameLog } from "../utilities/game/gameLog";
+import initializeScoreBoard from "../utilities/game/initalizeScoreBoard";
 import { playerShotDeterminator } from "../utilities/game/scoring";
 import { createPointParameters } from "../utilities/game/shotChartGenerator";
 
@@ -25,38 +26,7 @@ export default function Overview(): JSX.Element {
 
     const [shotChartCircles, setShotChartCircles] = useState<JSX.Element[]>([]);
     
-    const [scoreBoard, setScoreBoard] = useState<GameData>({
-        "home": {
-            name: "PHI",
-            pointsTotal: {
-                "1": 0,
-                "2": 0,
-                "3": 0,
-                "4": 0,
-                "Total": 0
-            },
-            "fga": 0,
-            "fgm": 0,
-            "tpm": 0,
-            "tpa": 0,
-            "biggestLead": 0
-        },
-        "away": {
-            name: "NYK",
-            pointsTotal: {
-                "1": 0,
-                "2": 0,
-                "3": 0,
-                "4": 0,
-                "Total": 0
-            },
-            "fga": 0,
-            "fgm": 0,
-            "tpm": 0,
-            "tpa": 0,
-            "biggestLead": 0
-        }
-    });
+    const [scoreBoard, setScoreBoard] = useState<GameData>(initializeScoreBoard(team1));
 
     // function scoreTeam(home: boolean, logoSizeCopy: { home: number, away: number }, score: number) {
     //     // const logoSizeCopy = { ...logoSize };
