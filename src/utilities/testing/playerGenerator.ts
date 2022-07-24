@@ -74,7 +74,7 @@ function pgGenerator() {
 function sgGenerator() {
     const newPlayer: PlayerObject = {
         ...createPlayerBackground(),
-        id: 0,
+        id: 1,
         teamNumber: 0,
         status: "Active",
         teams: { 2022: "ATL" },
@@ -131,7 +131,7 @@ function sgGenerator() {
 function sfGenerator() {
     const newPlayer: PlayerObject = {
         ...createPlayerBackground(),
-        id: 0,
+        id: 2,
         teamNumber: 0,
         status: "Active",
         teams: { 2022: "ATL" },
@@ -188,7 +188,7 @@ function sfGenerator() {
 function pfGenerator() {
     const newPlayer: PlayerObject = {
         ...createPlayerBackground(),
-        id: 0,
+        id: 3,
         teamNumber: 0,
         status: "Active",
         teams: { 2022: "ATL" },
@@ -245,7 +245,7 @@ function pfGenerator() {
 function cGenerator() {
     const newPlayer: PlayerObject = {
         ...createPlayerBackground(),
-        id: 0,
+        id: 4,
         teamNumber: 0,
         status: "Active",
         teams: { 2022: "ATL" },

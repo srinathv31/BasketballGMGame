@@ -130,7 +130,7 @@ export default function Overview(): JSX.Element {
             case "cal":
                 return <TeamStats scoreBoard={scoreBoard} />;
             case "home":
-                return <BoxScore />;
+                return <BoxScore scoreBoard={scoreBoard} team={team1}/>;
             default:
                 return null;
         }

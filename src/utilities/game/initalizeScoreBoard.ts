@@ -6,14 +6,14 @@ export default function initializeScoreBoard(team1: Team) {
     
     Object.values(team1.rosters[2022]).forEach(player => {
         teamBoxScore[player.id] = {
-            "MIN": 1,
-            "PTS": 1,
-            "REB": 1,
-            "AST": 1,
-            "BLK": 1,
-            "STL": 1,
-            "TO": 1,
-            "PF": 1
+            "MIN": 0,
+            "PTS": 0,
+            "REB": 0,
+            "AST": 0,
+            "BLK": 0,
+            "STL": 0,
+            "TO": 0,
+            "PF": 0
         };
     });
 
