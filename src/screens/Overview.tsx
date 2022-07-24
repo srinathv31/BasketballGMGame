@@ -13,7 +13,7 @@ import TeamStats from "../components/GamePage/TeamStats";
 import { GameData } from "../interfaces/Game";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { calculateTimeLeft } from "../utilities/game/clock";
-import { gameLog } from "../utilities/game/gameLog";
+import { gameActionGenerator } from "../utilities/game/gameActionGenerator";
 import initializeScoreBoard from "../utilities/game/initalizeScoreBoard";
 import { playerShotDeterminator } from "../utilities/game/scoring";
 import { createPointParameters } from "../utilities/game/shotChartGenerator";
@@ -46,7 +46,7 @@ export default function Overview(): JSX.Element {
     const [gameRunning, setGameRunning] = useState<boolean>(false);
     const [gameFinished, setGameFinished] = useState<boolean>(false);
     const [gameSpeed, setGameSpeed] = useState<number>(1000);
-    const [gameAction, setGameAction] = useState<string>("-");
+    const [gameLog, setGameLog] = useState<string[]>(["-"]);
     const [activeQuarter, setActiveQuarter] = useState<number>(1);
     const [gameClock, setGameClock] = useState<string>("12:00");
 
@@ -92,7 +92,7 @@ export default function Overview(): JSX.Element {
                             return [ ...currShotChart, <FGACircle key={currShotChart.length} pointParameters={pointParameters} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"} player={score.player} /> ];
                         });
                     }
-                    setGameAction(gameLog(score.score, currTeamScore[homeScore].name, score.fga, score.player!));
+                    setGameLog(currGameLog => [...currGameLog, gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)]);
                     setActiveQuarter(currQuarter => { 
                         // Run score function inside of setActiveQuarter to access activeQuarter value 
                         currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
@@ -144,7 +144,7 @@ export default function Overview(): JSX.Element {
     return(
         <>
             <CourtView shotChartCircles={shotChartCircles}/>
-            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameAction} team1={team1} />
+            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameLog[gameLog.length - 1]} team1={team1} />
             {/* <TeamStats scoreBoard={scoreBoard}/> */}
             <View style={{ flex: 1.2, height: 30 }}>
                 <TabView

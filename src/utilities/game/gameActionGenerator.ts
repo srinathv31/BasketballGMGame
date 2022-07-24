@@ -1,6 +1,6 @@
 import { ShotAttempt } from "../../interfaces/Game";
 
-export function gameLog(score: number, team: string, fga: ShotAttempt, playerName: string) {
+export function gameActionGenerator(score: number, team: string, fga: ShotAttempt, playerName: string) {
     
     if (score === 0) {
         return `Shot missed by ${playerName} - ${team}`;

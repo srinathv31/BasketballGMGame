@@ -5,7 +5,7 @@ import FGACircle from "../../components/GamePage/FGACircle";
 import PlayButton from "../../components/GamePage/PlayButton";
 import { GameData } from "../../interfaces/Game";
 import { useAppSelector } from "../../redux/hooks";
-import { gameLog } from "../../utilities/game/gameLog";
+import { gameActionGenerator } from "../game/gameActionGenerator";
 import { playerShotDeterminator } from "../../utilities/game/scoring";
 
 // export default function ShotTesting(): JSX.Element {
