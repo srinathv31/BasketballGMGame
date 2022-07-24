@@ -1,16 +1,23 @@
 // Source Imports
 import React from "react";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default function MenuIndicator({ index }: {
-    index: number
+export default function MenuIndicator({ index, setIndex }: {
+    index: number, setIndex: (i: number) => void
 }): JSX.Element {
+
+    const buttonList = [0, 1, 2];
+
     return(
         <View style={{ flexDirection: "row", justifyContent: "space-evenly", padding: 5 }}>
-            <Icon name={index === 0 ? "radio-button-on-outline" : "radio-button-off-outline"} size={12} color={"crimson"} />
-            <Icon name={index === 1 ? "radio-button-on-outline" : "radio-button-off-outline"} size={12} color={"crimson"} />
-            <Icon name={index === 2 ? "radio-button-on-outline" : "radio-button-off-outline"} size={12} color={"crimson"} />
+            {buttonList.map((item, idx) => {
+                return (
+                    <TouchableOpacity key={idx} onPress={() => setIndex(item)}>
+                        <Icon name={index === item ? "radio-button-on-outline" : "radio-button-off-outline"} size={12} color={"crimson"} />
+                    </TouchableOpacity>
+                );
+            })}
         </View>
     );
 }

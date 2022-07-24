@@ -5,6 +5,7 @@ import { Route, TabView } from "react-native-tab-view";
 import BoxScore from "../components/GamePage/BoxScore";
 import CourtView from "../components/GamePage/CourtView";
 import FGACircle from "../components/GamePage/FGACircle";
+import GameLog from "../components/GamePage/GameLog";
 import MenuIndicator from "../components/GamePage/MenuIndicator";
 import PlayButton from "../components/GamePage/PlayButton";
 import Scoreboard from "../components/GamePage/Scoreboard";
@@ -119,8 +120,9 @@ export default function Overview(): JSX.Element {
 
     const [index, setIndex] = useState<number>(0);
     const [routes] = useState([
-        { key: "cal", title: "Team Stats" },
-        { key: "home", title: "Box Score" },
+        { key: "stat", title: "Team Stats" },
+        { key: "box", title: "Box Score" },
+        { key: "log", title: "Game Log" },
 
     ]);
 
@@ -128,10 +130,12 @@ export default function Overview(): JSX.Element {
         route: Route
     }) => {
         switch (route.key) {
-            case "cal":
+            case "stat":
                 return <TeamStats scoreBoard={scoreBoard} />;
-            case "home":
+            case "box":
                 return <BoxScore scoreBoard={scoreBoard} team={team1}/>;
+            case "log":
+                return <GameLog />;
             default:
                 return null;
         }
@@ -151,7 +155,7 @@ export default function Overview(): JSX.Element {
                     renderTabBar={() => null}
                 />
             </View>
-            <MenuIndicator index={index}/>
+            <MenuIndicator index={index} setIndex={setIndex}/>
             <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} gameFinished={gameFinished} setGameSpeed={setGameSpeed}/>
         </>
     );
