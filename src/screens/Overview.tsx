@@ -5,6 +5,7 @@ import { Route, TabView } from "react-native-tab-view";
 import BoxScore from "../components/GamePage/BoxScore";
 import CourtView from "../components/GamePage/CourtView";
 import FGACircle from "../components/GamePage/FGACircle";
+import MenuIndicator from "../components/GamePage/MenuIndicator";
 import PlayButton from "../components/GamePage/PlayButton";
 import Scoreboard from "../components/GamePage/Scoreboard";
 import TeamStats from "../components/GamePage/TeamStats";
@@ -150,6 +151,7 @@ export default function Overview(): JSX.Element {
                     renderTabBar={() => null}
                 />
             </View>
+            <MenuIndicator index={index}/>
             <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} gameFinished={gameFinished} setGameSpeed={setGameSpeed}/>
         </>
     );
