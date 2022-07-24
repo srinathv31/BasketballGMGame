@@ -92,7 +92,11 @@ export default function Overview(): JSX.Element {
                             return [ ...currShotChart, <FGACircle key={currShotChart.length} pointParameters={pointParameters} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"} player={score.player} /> ];
                         });
                     }
-                    setGameLog(currGameLog => [...currGameLog, gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)]);
+                    setGameClock(currTime => {
+                        // Run Game Log function inside of setGameClock to access gameClock value
+                        setGameLog(currGameLog => [...currGameLog, `${currTime}: ${gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)}`]);
+                        return currTime;
+                    });
                     setActiveQuarter(currQuarter => { 
                         // Run score function inside of setActiveQuarter to access activeQuarter value 
                         currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
@@ -135,7 +139,7 @@ export default function Overview(): JSX.Element {
             case "box":
                 return <BoxScore scoreBoard={scoreBoard} team={team1}/>;
             case "log":
-                return <GameLog />;
+                return <GameLog gameLog={gameLog}/>;
             default:
                 return null;
         }
