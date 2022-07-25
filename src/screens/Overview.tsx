@@ -46,7 +46,7 @@ export default function Overview(): JSX.Element {
     const [gameRunning, setGameRunning] = useState<boolean>(false);
     const [gameFinished, setGameFinished] = useState<boolean>(false);
     const [gameSpeed, setGameSpeed] = useState<number>(1000);
-    const [gameLog, setGameLog] = useState<string[]>(["-"]);
+    const [gameLog, setGameLog] = useState<Record<number, string[]>>({ 1: ["Quarter 1", "-"], 2: ["Quarter 2"], 3: ["Quarter 3"], 4: ["Quarter 4"], 5: ["Overtime"] });
     const [activeQuarter, setActiveQuarter] = useState<number>(1);
     const [gameClock, setGameClock] = useState<string>("12:00");
 
@@ -92,13 +92,18 @@ export default function Overview(): JSX.Element {
                             return [ ...currShotChart, <FGACircle key={currShotChart.length} pointParameters={pointParameters} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"} player={score.player} /> ];
                         });
                     }
-                    setGameClock(currTime => {
-                        // Run Game Log function inside of setGameClock to access gameClock value
-                        setGameLog(currGameLog => [...currGameLog, `${currTime}: ${gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)}`]);
-                        return currTime;
-                    });
+                    
                     setActiveQuarter(currQuarter => { 
-                        // Run score function inside of setActiveQuarter to access activeQuarter value 
+                        // Run score function inside of setActiveQuarter to access activeQuarter value
+                        setGameClock(currTime => {
+                            // Run Game Log function inside of setGameClock to access gameClock value
+                            setGameLog(currGameLog => {
+                                const currGameLogCopy = { ...currGameLog };
+                                currGameLogCopy[currQuarter] = [...currGameLogCopy[currQuarter], `Q${currQuarter} | ${currTime}: ${gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)}`];
+                                return currGameLogCopy;
+                            });
+                            return currTime;
+                        });
                         currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
                         const leadOverOpp = currTeamScore[homeScore].pointsTotal["Total"] - currTeamScore[homeScore === "home" ? "away" : "home"].pointsTotal["Total"];
                         if (leadOverOpp > currTeamScore[homeScore].biggestLead) {
@@ -148,7 +153,7 @@ export default function Overview(): JSX.Element {
     return(
         <>
             <CourtView shotChartCircles={shotChartCircles}/>
-            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameLog[gameLog.length - 1]} team1={team1} />
+            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameLog[activeQuarter][gameLog[activeQuarter].length - 1]} team1={team1} />
             {/* <TeamStats scoreBoard={scoreBoard}/> */}
             <View style={{ flex: 1.2, height: 30 }}>
                 <TabView

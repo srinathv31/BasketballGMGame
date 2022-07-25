@@ -22,7 +22,7 @@ export function calculateTimeLeft(currTime: string) {
     const newSeconds = +newSecondsRaw*60;
 
     const strMinute = newMinute < 10 ? "0"+newMinute : newMinute;
-    const strSecond = newSeconds < 10 ? "0"+newSeconds : (newSeconds === 60 && newMinute > 0) ? "59" : newSeconds;
+    const strSecond = newSeconds < 10 ? "0"+newSeconds : newSeconds === 60 ? "59" : newSeconds;
 
     // console.log(`${strMinute}:${strSecond}`);
     return `${strMinute}:${strSecond}`;
