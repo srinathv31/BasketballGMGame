@@ -148,7 +148,7 @@ export default function Overview(): JSX.Element {
             case "box":
                 return <BoxScore scoreBoard={scoreBoard} team={team1}/>;
             case "log":
-                return <GameLog gameLog={gameLog}/>;
+                return <GameLog gameLog={gameLog} shotChartCircles={shotChartCircles}/>;
             default:
                 return null;
         }
