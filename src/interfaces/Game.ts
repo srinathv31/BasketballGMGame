@@ -43,3 +43,8 @@ export interface GameAction {
     shotID?: number,
     action: string
 }
+
+export interface ShotChartFilter {
+    filterType: ShotAttempt | "player" | "none",
+    playerName?: string
+}

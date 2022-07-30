@@ -10,7 +10,7 @@ import MenuIndicator from "../components/GamePage/MenuIndicator";
 import PlayButton from "../components/GamePage/PlayButton";
 import Scoreboard from "../components/GamePage/Scoreboard";
 import TeamStats from "../components/GamePage/TeamStats";
-import { GameAction, GameData } from "../interfaces/Game";
+import { GameAction, GameData, ShotChartFilter } from "../interfaces/Game";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { calculateTimeLeft } from "../utilities/game/clock";
 import { gameActionGenerator } from "../utilities/game/gameActionGenerator";
@@ -25,23 +25,10 @@ export default function Overview(): JSX.Element {
 
     const team1 = teams.find(team => team.name === "PHI")!;
 
-    // const [logoSize, setLogoSize] = useState<{ home: number, away: number }>({ home: 45, away: 45 });
-
     const [shotChartCircles, setShotChartCircles] = useState<JSX.Element[]>([]);
     
     const [scoreBoard, setScoreBoard] = useState<GameData>(initializeScoreBoard(team1));
-
-    // function scoreTeam(home: boolean, logoSizeCopy: { home: number, away: number }, score: number) {
-    //     // const logoSizeCopy = { ...logoSize };
-    //     if (home) {
-    //         logoSizeCopy.home + score < 50 ? logoSizeCopy.home = logoSizeCopy.home + score : console.log("max size");
-    //         logoSizeCopy.away - score > 20 ? logoSizeCopy.away = logoSizeCopy.away - score : console.log("min size");
-    //     } else {
-    //         logoSizeCopy.away + score < 50 ? logoSizeCopy.away = logoSizeCopy.away + score : console.log("max size");
-    //         logoSizeCopy.home - score > 20 ? logoSizeCopy.home = logoSizeCopy.home - score : console.log("min size");
-    //     }
-    //     return logoSizeCopy;
-    // }
+    const [filter, setFilter] = useState<ShotChartFilter>({ filterType: "none" });
 
     const [possession, setPossession] = useState<number>(0);
     const [gameRunning, setGameRunning] = useState<boolean>(false);
@@ -157,9 +144,9 @@ export default function Overview(): JSX.Element {
     }) => {
         switch (route.key) {
             case "stat":
-                return <TeamStats scoreBoard={scoreBoard} />;
+                return <TeamStats scoreBoard={scoreBoard} setFilter={setFilter}/>;
             case "box":
-                return <BoxScore scoreBoard={scoreBoard} team={team1}/>;
+                return <BoxScore scoreBoard={scoreBoard} team={team1} setFilter={setFilter}/>;
             case "log":
                 return <GameLog gameLog={gameLog} setShotChartCircles={setShotChartCircles}/>;
             default:
@@ -169,9 +156,8 @@ export default function Overview(): JSX.Element {
     
     return(
         <>
-            <CourtView shotChartCircles={shotChartCircles}/>
+            <CourtView shotChartCircles={shotChartCircles} filter={filter}/>
             <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameLog[activeQuarter][gameLog[activeQuarter].length - 1].action} team1={team1} />
-            {/* <TeamStats scoreBoard={scoreBoard}/> */}
             <View style={{ flex: 1.2, height: 30 }}>
                 <TabView
                     navigationState={{ index, routes }}

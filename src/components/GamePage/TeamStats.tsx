@@ -1,26 +1,37 @@
 // Source Imports
-import React from "react";
+import React, { SetStateAction } from "react";
 import { View, Text } from "react-native";
-import { GameData } from "../../interfaces/Game";
+import { GameData, ShotAttempt, ShotChartFilter } from "../../interfaces/Game";
 
-export default function TeamStats({ scoreBoard }: {
-    scoreBoard: GameData
+export default function TeamStats({ scoreBoard, setFilter }: {
+    scoreBoard: GameData,
+    setFilter: React.Dispatch<SetStateAction<ShotChartFilter>>
 }): JSX.Element {
     
     interface StatLabel {
         label: string,
         statKey: "fgm" | "fga" | "tpm" | "tpa" | "biggestLead",
-        statKeyAtt?: "fgm" | "fga" | "tpm" | "tpa" | "biggestLead"
+        statKeyAtt?: "fgm" | "fga" | "tpm" | "tpa" | "biggestLead",
+        shotType?: ShotAttempt | "none"
     }
 
     const statsList: StatLabel[] = [ 
-        { label: "FIELD GOALS", statKey: "fgm", statKeyAtt: "fga" }, 
-        { label: "3 POINTERS", statKey: "tpm", statKeyAtt: "tpa" }, 
+        { label: "FIELD GOALS", statKey: "fgm", statKeyAtt: "fga", shotType: "none" }, 
+        { label: "3 POINTERS", statKey: "tpm", statKeyAtt: "tpa", shotType: "threePoint" }, 
         { label: "FREE THROWS", statKey: "fgm", statKeyAtt: "fga" }, 
         { label: "REBOUNDS", statKey: "fgm" }, 
         { label: "TURNOVERS", statKey: "fgm" }, 
         { label: "BIGGEST LEAD", statKey: "biggestLead" } 
     ];
+
+    function selectFilter(shotType: ShotAttempt | "none" | undefined) {
+        if (shotType === undefined) {
+            return;
+        }
+        setFilter({
+            filterType: shotType
+        });
+    }
 
     return(
         <>
@@ -36,7 +47,7 @@ export default function TeamStats({ scoreBoard }: {
                             ? <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home[item.statKey]}/${scoreBoard.home[item.statKeyAtt]}`}</Text>
                             : <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home[item.statKey]}`}</Text>
                         }
-                        <Text style={{ width: 100, textAlign: "center" }}>{item.label}</Text>
+                        <Text onPress={() => selectFilter(item.shotType)} style={{ width: 100, textAlign: "center" }}>{item.label}</Text>
                         { item.statKeyAtt !== undefined
                             ? <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away[item.statKey]}/${scoreBoard.away[item.statKeyAtt]}`}</Text>
                             : <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away[item.statKey]}`}</Text>
