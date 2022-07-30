@@ -1,7 +1,7 @@
 // Source Imports
 import React from "react";
 import { ImageBackground, View } from "react-native";
-import ReferencePoints from "./ReferencePoints";
+// import ReferencePoints from "./ReferencePoints";
 
 export default function CourtView({ shotChartCircles }: {
     shotChartCircles: JSX.Element[]
@@ -19,7 +19,7 @@ export default function CourtView({ shotChartCircles }: {
                     );
                 })}
                     
-                <ReferencePoints />
+                {/* <ReferencePoints /> */}
             </View>
         </ImageBackground>
     );

@@ -16,7 +16,7 @@ export default function BoxScore({ scoreBoard, team }: {
         <ScrollView style={{ flex: 1, padding: 5 }} horizontal={true}>
             <View style={{ flex: 1 }}>
                 <View style={{ flexDirection: "row", padding: 5 }}>
-                    <Text style={{ width: 150 }}>{""}</Text>
+                    <Text style={{ width: 165 }}>{""}</Text>
                     <View style={{ flexDirection: "row" }}>
                         {statHeader.map((label, idx) => {
                             return (
@@ -48,7 +48,7 @@ export default function BoxScore({ scoreBoard, team }: {
 
 const styles = StyleSheet.create({
     boxScoreName: {
-        width: 120,
+        width: 135,
         textAlign: "left",
     },
     boxScoreNumber: {

@@ -90,7 +90,20 @@ export default function Overview(): JSX.Element {
                         setShotChartCircles(currShotChart => {
                             const pointParameters = createPointParameters(score.fga);
                             // console.log(pointParameters);
-                            return [ ...currShotChart, <FGACircle key={currShotChart.length} pointParameters={pointParameters} fgm={score.score !== 0} fgtype={score.fga} teamColor={homeScore === "home" ? "crimson" : "orangered"} home={homeScore === "home"} player={score.player} /> ];
+                            return [ 
+                                ...currShotChart, 
+                                <FGACircle 
+                                    key={currShotChart.length} 
+                                    pointParameters={pointParameters} 
+                                    fgm={score.score !== 0} 
+                                    fgtype={score.fga} 
+                                    teamColor={homeScore === "home" ? "crimson" : "orangered"} 
+                                    home={homeScore === "home"} 
+                                    player={score.player} 
+                                    active={false} 
+                                    shotID={currShotChart.length}
+                                    setShotChartCircles={setShotChartCircles}
+                                /> ];
                         });
                     }
                     
@@ -148,7 +161,7 @@ export default function Overview(): JSX.Element {
             case "box":
                 return <BoxScore scoreBoard={scoreBoard} team={team1}/>;
             case "log":
-                return <GameLog gameLog={gameLog} shotChartCircles={shotChartCircles}/>;
+                return <GameLog gameLog={gameLog} setShotChartCircles={setShotChartCircles}/>;
             default:
                 return null;
         }

@@ -1,12 +1,12 @@
 // Source Imports
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { GameAction } from "../../interfaces/Game";
 import GamelogMenuTab from "./GameLogMenuTab";
 
-export default function GameLog({ gameLog, shotChartCircles }: {
+export default function GameLog({ gameLog, setShotChartCircles }: {
     gameLog: Record<number, GameAction[]>,
-    shotChartCircles: JSX.Element[]
+    setShotChartCircles: React.Dispatch<SetStateAction<JSX.Element[]>>
 }): JSX.Element {
     const [selectedQuarter, setSelectedQuarter] = useState<number>(0);
 
@@ -14,7 +14,24 @@ export default function GameLog({ gameLog, shotChartCircles }: {
         if (shotID === undefined) {
             return;
         }
-        console.log(shotChartCircles[shotID]);
+        setShotChartCircles(currChart => {
+            const shotChartCirclesCopy = [ ...currChart ];
+
+            // Hide all other Popovers
+            shotChartCirclesCopy.forEach((shot, idx) => {
+                shotChartCirclesCopy[idx] = React.cloneElement(
+                    shot,
+                    { "active": false }
+                );
+            });
+
+            // Show selected shot Popover
+            shotChartCirclesCopy[shotID] = React.cloneElement(
+                currChart[shotID],
+                { "active": !currChart[shotID].props["active"] }
+            );
+            return shotChartCirclesCopy;
+        });
     }
 
     return(
