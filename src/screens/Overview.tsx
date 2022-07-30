@@ -10,10 +10,11 @@ import MenuIndicator from "../components/GamePage/MenuIndicator";
 import PlayButton from "../components/GamePage/PlayButton";
 import Scoreboard from "../components/GamePage/Scoreboard";
 import TeamStats from "../components/GamePage/TeamStats";
-import { GameData } from "../interfaces/Game";
+import { GameAction, GameData } from "../interfaces/Game";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { calculateTimeLeft } from "../utilities/game/clock";
 import { gameActionGenerator } from "../utilities/game/gameActionGenerator";
+import initializeGameLog from "../utilities/game/initalizeGameLog";
 import initializeScoreBoard from "../utilities/game/initalizeScoreBoard";
 import { playerShotDeterminator } from "../utilities/game/scoring";
 import { createPointParameters } from "../utilities/game/shotChartGenerator";
@@ -46,7 +47,7 @@ export default function Overview(): JSX.Element {
     const [gameRunning, setGameRunning] = useState<boolean>(false);
     const [gameFinished, setGameFinished] = useState<boolean>(false);
     const [gameSpeed, setGameSpeed] = useState<number>(1000);
-    const [gameLog, setGameLog] = useState<Record<number, string[]>>({ 1: ["Quarter 1", "-"], 2: ["Quarter 2"], 3: ["Quarter 3"], 4: ["Quarter 4"], 5: ["Overtime"] });
+    const [gameLog, setGameLog] = useState<Record<number, GameAction[]>>(initializeGameLog());
     const [activeQuarter, setActiveQuarter] = useState<number>(1);
     const [gameClock, setGameClock] = useState<string>("12:00");
 
@@ -97,10 +98,13 @@ export default function Overview(): JSX.Element {
                         // Run score function inside of setActiveQuarter to access activeQuarter value
                         setGameClock(currTime => {
                             // Run Game Log function inside of setGameClock to access gameClock value
-                            setGameLog(currGameLog => {
-                                const currGameLogCopy = { ...currGameLog };
-                                currGameLogCopy[currQuarter] = [...currGameLogCopy[currQuarter], `Q${currQuarter} | ${currTime}: ${gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)}`];
-                                return currGameLogCopy;
+                            setShotChartCircles(currShotChart => {
+                                setGameLog(currGameLog => {
+                                    const currGameLogCopy = { ...currGameLog };
+                                    currGameLogCopy[currQuarter] = [...currGameLogCopy[currQuarter], { action: `Q${currQuarter} | ${currTime}: ${gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)}`, shotID: currShotChart.length-1 }];
+                                    return currGameLogCopy;
+                                });
+                                return currShotChart;
                             });
                             return currTime;
                         });
@@ -153,7 +157,7 @@ export default function Overview(): JSX.Element {
     return(
         <>
             <CourtView shotChartCircles={shotChartCircles}/>
-            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameLog[activeQuarter][gameLog[activeQuarter].length - 1]} team1={team1} />
+            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameLog[activeQuarter][gameLog[activeQuarter].length - 1].action} team1={team1} />
             {/* <TeamStats scoreBoard={scoreBoard}/> */}
             <View style={{ flex: 1.2, height: 30 }}>
                 <TabView

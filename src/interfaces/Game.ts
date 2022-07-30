@@ -38,3 +38,8 @@ export interface BoxScore {
         "PF": number
     }
 }
+
+export interface GameAction {
+    shotID?: number,
+    action: string
+}
