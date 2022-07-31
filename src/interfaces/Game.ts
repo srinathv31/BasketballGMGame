@@ -41,7 +41,8 @@ export interface BoxScore {
 
 export interface GameAction {
     shotID?: number,
-    action: string
+    action: string,
+    gameScore?: string
 }
 
 export interface ShotChartFilter {

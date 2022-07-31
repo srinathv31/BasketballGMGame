@@ -100,19 +100,29 @@ export default function Overview(): JSX.Element {
                             // Run Game Log function inside of setGameClock to access gameClock value
                             setShotChartCircles(currShotChart => {
                                 setGameLog(currGameLog => {
+                                    // Update ScoreBoard
+                                    currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
+                                    const leadOverOpp = currTeamScore[homeScore].pointsTotal["Total"] - currTeamScore[homeScore === "home" ? "away" : "home"].pointsTotal["Total"];
+                                    if (leadOverOpp > currTeamScore[homeScore].biggestLead) {
+                                        currTeamScore[homeScore].biggestLead = leadOverOpp;
+                                    }
+                                    // Update Game Log
                                     const currGameLogCopy = { ...currGameLog };
-                                    currGameLogCopy[currQuarter] = [...currGameLogCopy[currQuarter], { action: `Q${currQuarter} | ${currTime}: ${gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)}`, shotID: currShotChart.length-1 }];
+                                    currGameLogCopy[currQuarter] = [
+                                        ...currGameLogCopy[currQuarter],
+                                        { 
+                                            action: `Q${currQuarter} | ${currTime}: ${gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)}`, 
+                                            shotID: currShotChart.length-1,
+                                            gameScore: `${currTeamScore["home"].pointsTotal["Total"]} - ${currTeamScore["away"].pointsTotal["Total"]}`
+                                        }
+                                    ];
                                     return currGameLogCopy;
                                 });
                                 return currShotChart;
                             });
                             return currTime;
                         });
-                        currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
-                        const leadOverOpp = currTeamScore[homeScore].pointsTotal["Total"] - currTeamScore[homeScore === "home" ? "away" : "home"].pointsTotal["Total"];
-                        if (leadOverOpp > currTeamScore[homeScore].biggestLead) {
-                            currTeamScore[homeScore].biggestLead = leadOverOpp;
-                        }
+                        
                         return currQuarter;
                     });
                     return currTeamScore;
