@@ -16,21 +16,21 @@ export default function GameLog({ gameLog, setShotChartCircles }: {
         }
         setShotChartCircles(currChart => {
             const shotChartCirclesCopy = [ ...currChart ];
+            const lastElement = shotChartCirclesCopy[shotChartCirclesCopy.length-1];
 
-            // Hide all other Popovers
-            shotChartCirclesCopy.forEach((shot, idx) => {
-                shotChartCirclesCopy[idx] = React.cloneElement(
-                    shot,
-                    { "active": false }
-                );
-            });
+            if (lastElement.props["active"] === true && lastElement.props["shotID"] === shotID) {
+                return shotChartCirclesCopy.splice(0, shotChartCirclesCopy.length-1);
+            }
 
-            // Show selected shot Popover
-            shotChartCirclesCopy[shotID] = React.cloneElement(
+            // Remove any duplicates
+            const filteredList = shotChartCirclesCopy.filter(shot => shot.props["active"] === false);
+
+            // Duplicate selected shot to layer on top of everything else
+            filteredList.push(React.cloneElement(
                 currChart[shotID],
-                { "active": !currChart[shotID].props["active"] }
-            );
-            return shotChartCirclesCopy;
+                { "active": true }
+            ));
+            return filteredList;
         });
     }
 

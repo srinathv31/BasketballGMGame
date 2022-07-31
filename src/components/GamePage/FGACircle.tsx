@@ -20,21 +20,21 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
     function findShotOnCourt() {
         setShotChartCircles(currChart => {
             const shotChartCirclesCopy = [ ...currChart ];
+            const lastElement = shotChartCirclesCopy[shotChartCirclesCopy.length-1];
 
-            // Hide all other Popovers
-            shotChartCirclesCopy.forEach((shot, idx) => {
-                shotChartCirclesCopy[idx] = React.cloneElement(
-                    shot,
-                    { "active": false }
-                );
-            });
+            if (lastElement.props["active"] === true && lastElement.props["shotID"] === shotID) {
+                return shotChartCirclesCopy.splice(0, shotChartCirclesCopy.length-1);
+            }
 
-            // Show selected shot Popover
-            shotChartCirclesCopy[shotID] = React.cloneElement(
+            // Remove any duplicates
+            const filteredList = shotChartCirclesCopy.filter(shot => shot.props["active"] === false);
+
+            // Duplicate selected shot to layer on top of everything else
+            filteredList.push(React.cloneElement(
                 currChart[shotID],
-                { "active": !currChart[shotID].props["active"] }
-            );
-            return shotChartCirclesCopy;
+                { "active": true }
+            ));
+            return filteredList;
         });
     }
     
@@ -61,7 +61,7 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
                         <TouchableOpacity onPress={() => findShotOnCourt()}
                             style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: `${pointParameters.x}%`, bottom: `${pointParameters.y}%` }}>
                             <Svg height="100" width="100" style={{ position: "absolute" }}>
-                                <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={"black"} strokeWidth={3}  />
+                                <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={active ? "lime" : "black"} strokeWidth={3}  />
                             </Svg>
                         </TouchableOpacity>
                     )}
@@ -80,7 +80,7 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
                         <TouchableOpacity onPress={() => findShotOnCourt()} 
                             style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", right: `${pointParameters.x}%`, bottom: `${pointParameters.y}%` }}>
                             <Svg height="100" width="100" style={{ position: "absolute" }}>
-                                <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={"black"} strokeWidth={3}  />
+                                <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={active ? "lime" : "black"} strokeWidth={3}  />
                             </Svg>
                         </TouchableOpacity>
                     )}

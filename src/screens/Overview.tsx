@@ -40,6 +40,10 @@ export default function Overview(): JSX.Element {
 
     useEffect(() => {
         if (gameRunning) {
+            // Remove any Popovers
+            setShotChartCircles(currChart => {
+                return currChart.filter(shot => shot.props["active"] !== true);
+            });
             // create a interval and get the id
             const myInterval = setInterval(() => {
                 let homeScore: "home" | "away" = "home";
@@ -69,14 +73,12 @@ export default function Overview(): JSX.Element {
                     currTeamScore[homeScore].fga++;
                     score.fga === "threePoint" && currTeamScore[homeScore].tpa++;
                     if (score.score !== 0) {
-                        // setLogoSize(currLogoSize => scoreTeam(homeScore === "home", currLogoSize, score.score));
                         currTeamScore[homeScore].fgm++;
                         score.fga === "threePoint" && currTeamScore[homeScore].tpm++;
                     }
                     if (score.score !== 1) {
                         setShotChartCircles(currShotChart => {
                             const pointParameters = createPointParameters(score.fga);
-                            // console.log(pointParameters);
                             return [ 
                                 ...currShotChart, 
                                 <FGACircle 

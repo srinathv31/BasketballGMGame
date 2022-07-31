@@ -19,9 +19,9 @@ export default function CourtView({ shotChartCircles, filter }: {
                         return item.props["player"] === filter.playerName;
                     }
                     return item.props["fgtype"] === filter.filterType;
-                }).map((item) => {
+                }).map((item, idx) => {
                     return(
-                        <React.Fragment key={item.key}>
+                        <React.Fragment key={idx}>
                             { item }
                         </React.Fragment>
                     );
