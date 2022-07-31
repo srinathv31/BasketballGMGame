@@ -11,8 +11,6 @@ export default function CourtView({ shotChartCircles, filter }: {
     return(
         <ImageBackground source={require("../../assets/gameScreen/basketballCourt.jpg")} style={{ flex: 1 }} >
             <View style={{ flex: 1, justifyContent: "space-around", alignItems: "center", flexDirection: "row" }}>
-                {/* <TeamLogo team="PHI" logoSize={40} />
-                <TeamLogo team="NYK" logoSize={40}/> */}
                 {shotChartCircles.filter(item => {
                     if (filter.filterType === "none") {
                         return item;

@@ -1,11 +1,11 @@
 // Source Imports
 import React, { SetStateAction } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { GameData, ShotAttempt, ShotChartFilter } from "../../interfaces/Game";
 
-export default function TeamStats({ scoreBoard, setFilter }: {
+export default function TeamStats({ scoreBoard, setFilter, filter }: {
     scoreBoard: GameData,
-    setFilter: React.Dispatch<SetStateAction<ShotChartFilter>>
+    setFilter: React.Dispatch<SetStateAction<ShotChartFilter>>, filter: ShotChartFilter
 }): JSX.Element {
     
     interface StatLabel {
@@ -47,7 +47,9 @@ export default function TeamStats({ scoreBoard, setFilter }: {
                             ? <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home[item.statKey]}/${scoreBoard.home[item.statKeyAtt]}`}</Text>
                             : <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home[item.statKey]}`}</Text>
                         }
-                        <Text onPress={() => selectFilter(item.shotType)} style={{ width: 100, textAlign: "center" }}>{item.label}</Text>
+                        <TouchableOpacity onPress={() => selectFilter(item.shotType)}>
+                            <Text style={{ width: 100, textAlign: "center", backgroundColor: filter.filterType === item.shotType ? "crimson" : "transparent" }}>{item.label}</Text>
+                        </TouchableOpacity>
                         { item.statKeyAtt !== undefined
                             ? <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away[item.statKey]}/${scoreBoard.away[item.statKeyAtt]}`}</Text>
                             : <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away[item.statKey]}`}</Text>

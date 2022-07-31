@@ -144,7 +144,7 @@ export default function Overview(): JSX.Element {
     }) => {
         switch (route.key) {
             case "stat":
-                return <TeamStats scoreBoard={scoreBoard} setFilter={setFilter}/>;
+                return <TeamStats scoreBoard={scoreBoard} setFilter={setFilter} filter={filter}/>;
             case "box":
                 return <BoxScore scoreBoard={scoreBoard} team={team1} setFilter={setFilter}/>;
             case "log":
