@@ -12,6 +12,7 @@ import Overview from "./screens/Overview";
 import RosterPage from "./screens/RosterPage";
 import { PageView } from "./interfaces/Page";
 import { globalPropsContext } from "./hooks/context/GlobalPropContext";
+import PlayGamePage from "./screens/PlayGamePage";
 
 LogBox.ignoreLogs(["Sending"]);
 
@@ -72,7 +73,7 @@ const App = () => {
                         tabBarPosition="bottom"
                         renderTabBar={() => index !== 0 && <BottomMenuTab />}
                     />
-                    : <Overview />
+                    : <PlayGamePage />
                 }
             </SafeAreaView>
         </globalPropsContext.Provider>

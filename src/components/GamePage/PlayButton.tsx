@@ -1,13 +1,15 @@
 // Source Imports
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { globalPropsContext } from "../../hooks/context/GlobalPropContext";
 
 export default function PlayButton({ gameFinished, gameRunning, setGameRunning, setGameSpeed }: {
     gameFinished: boolean,
     gameRunning: boolean, setGameRunning: (g: boolean) => void,
     setGameSpeed: (s: number) => void
 }): JSX.Element {
+    const { setPageView } = useContext(globalPropsContext);
     
     interface SpeedButton {
         val: number,
@@ -77,7 +79,7 @@ export default function PlayButton({ gameFinished, gameRunning, setGameRunning, 
                         </View>
                     }
                 </View> :
-                <TouchableOpacity onPress={() => console.log("Next")} style={{ backgroundColor: "silver", padding: 15 }}>
+                <TouchableOpacity onPress={() => setPageView("home")} style={{ backgroundColor: "silver", padding: 15 }}>
                     <Text style={{ alignSelf: "center", fontWeight: "700" }}>NEXT</Text>
                 </TouchableOpacity>
             }
