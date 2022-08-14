@@ -10,6 +10,9 @@ import NextGamePage from "./screens/NextGamePage";
 import LeaguePage from "./screens/LeaguePage";
 import Overview from "./screens/Overview";
 import RosterPage from "./screens/RosterPage";
+import { PageView } from "./interfaces/Page";
+import { globalPropsContext } from "./hooks/context/GlobalPropContext";
+
 LogBox.ignoreLogs(["Sending"]);
 
 const App = () => {
@@ -24,6 +27,8 @@ const App = () => {
 
     const index = useAppSelector(state => state.indexTracker.value);
     const dispatch = useAppDispatch();
+
+    const [pageView, setPageView] = useState<PageView>("home");
 
     const [routes] = useState([
         { key: "cal", title: "Overview" },
@@ -49,23 +54,28 @@ const App = () => {
         }
     };
 
+    const GlobalProps = { setPageView, pageView };
+
     return (
-        <>
+        <globalPropsContext.Provider value={GlobalProps}>
             <View style={{ backgroundColor: "crimson", flex: 0.1 }}>
                 <Header/>
             </View>
             <SafeAreaView style={backgroundStyle}>
                 <StatusBar barStyle={"light-content"} />
-                <TabView
-                    navigationState={{ index, routes }}
-                    renderScene={renderScene}
-                    onIndexChange={(index) => dispatch(setByValue(index))}
-                    initialLayout={{ width: layout.width }}
-                    tabBarPosition="bottom"
-                    renderTabBar={() => index !== 0 && <BottomMenuTab />}
-                />
+                { pageView === "home" 
+                    ? <TabView
+                        navigationState={{ index, routes }}
+                        renderScene={renderScene}
+                        onIndexChange={(index) => dispatch(setByValue(index))}
+                        initialLayout={{ width: layout.width }}
+                        tabBarPosition="bottom"
+                        renderTabBar={() => index !== 0 && <BottomMenuTab />}
+                    />
+                    : <Overview />
+                }
             </SafeAreaView>
-        </>
+        </globalPropsContext.Provider>
     );
 };
 
