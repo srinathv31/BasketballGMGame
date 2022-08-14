@@ -5,7 +5,7 @@ import Popover, { PopoverMode } from "react-native-popover-view";
 import Svg, { Circle } from "react-native-svg";
 import { ShotAttempt } from "../../interfaces/Game";
 
-export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameters, player, active, shotID, setShotChartCircles }: {
+export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameters, player, active, shotID, setShotChartCircles, gameRunning }: {
     fgm: boolean,
     fgtype: ShotAttempt,
     teamColor: string,
@@ -14,7 +14,8 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
     player: string,
     active: boolean,
     shotID: number,
-    setShotChartCircles: React.Dispatch<SetStateAction<JSX.Element[]>>
+    setShotChartCircles: React.Dispatch<SetStateAction<JSX.Element[]>>,
+    gameRunning: boolean
 }): JSX.Element {
 
     function findShotOnCourt() {
@@ -58,7 +59,7 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
             { home ? 
                 <Popover 
                     from={() => (
-                        <TouchableOpacity onPress={() => findShotOnCourt()}
+                        <TouchableOpacity onPress={() => findShotOnCourt()} disabled={gameRunning}
                             style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", left: `${pointParameters.x}%`, bottom: `${pointParameters.y}%` }}>
                             <Svg height="100" width="100" style={{ position: "absolute" }}>
                                 <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={active ? "lime" : "black"} strokeWidth={3}  />
@@ -77,7 +78,7 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
                 </Popover> :
                 <Popover 
                     from={() => (
-                        <TouchableOpacity onPress={() => findShotOnCourt()} 
+                        <TouchableOpacity onPress={() => findShotOnCourt()} disabled={gameRunning}
                             style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", position: "absolute", right: `${pointParameters.x}%`, bottom: `${pointParameters.y}%` }}>
                             <Svg height="100" width="100" style={{ position: "absolute" }}>
                                 <Circle cx="50" cy="50" r="5" fill={fgm ? teamColor : "transparent"} stroke={active ? "lime" : "black"} strokeWidth={3}  />

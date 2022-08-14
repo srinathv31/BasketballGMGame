@@ -92,6 +92,7 @@ export default function PlayGamePage(): JSX.Element {
                                     active={false} 
                                     shotID={currShotChart.length}
                                     setShotChartCircles={setShotChartCircles}
+                                    gameRunning={true}
                                 /> ];
                         });
                     }
@@ -165,6 +166,24 @@ export default function PlayGamePage(): JSX.Element {
                 return null;
         }
     };
+
+    // Hook to enable/disable viewing shots while game is running
+    useEffect(() => {
+
+        setShotChartCircles(currChart => {
+            const shotChartCirclesCopy = [ ...currChart ];
+    
+            // enable/disable all Popovers
+            shotChartCirclesCopy.forEach((shot, idx) => {
+                shotChartCirclesCopy[idx] = React.cloneElement(
+                    shot,
+                    { "gameRunning": gameRunning }
+                );
+            });
+            return shotChartCirclesCopy;
+        });
+
+    }, [gameRunning]);
     
     return(
         <>
