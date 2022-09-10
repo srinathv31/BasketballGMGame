@@ -3,11 +3,13 @@ import React, { useContext, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { globalPropsContext } from "../../hooks/context/GlobalPropContext";
+import { GameData } from "../../interfaces/Game";
 
-export default function PlayButton({ gameFinished, gameRunning, setGameRunning, setGameSpeed }: {
+export default function PlayButton({ gameFinished, gameRunning, setGameRunning, setGameSpeed, scoreBoard }: {
     gameFinished: boolean,
     gameRunning: boolean, setGameRunning: (g: boolean) => void,
-    setGameSpeed: (s: number) => void
+    setGameSpeed: (s: number) => void,
+    scoreBoard: GameData
 }): JSX.Element {
     const { setPageView } = useContext(globalPropsContext);
     
@@ -79,7 +81,7 @@ export default function PlayButton({ gameFinished, gameRunning, setGameRunning, 
                         </View>
                     }
                 </View> :
-                <TouchableOpacity onPress={() => setPageView("home")} style={{ backgroundColor: "silver", padding: 15 }}>
+                <TouchableOpacity onPress={() => console.log(JSON.stringify(scoreBoard))} style={{ backgroundColor: "silver", padding: 15 }}>
                     <Text style={{ alignSelf: "center", fontWeight: "700" }}>NEXT</Text>
                 </TouchableOpacity>
             }

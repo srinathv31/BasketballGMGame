@@ -35,7 +35,7 @@ export default function PlayGamePage(): JSX.Element {
     const [gameFinished, setGameFinished] = useState<boolean>(false);
     const [gameSpeed, setGameSpeed] = useState<number>(1000);
     const [gameLog, setGameLog] = useState<Record<number, GameAction[]>>(initializeGameLog());
-    const [activeQuarter, setActiveQuarter] = useState<number>(4);
+    const [activeQuarter, setActiveQuarter] = useState<number>(1);
     const [gameClock, setGameClock] = useState<string>("12:00");
 
     useEffect(() => {
@@ -57,17 +57,14 @@ export default function PlayGamePage(): JSX.Element {
                 setGameClock(currTime => {
                     if (currTime === "00:00"){
                         setActiveQuarter(currQuarter => {
-                            currQuarter !== 4 ? setGameClock("12:00") : setGameClock("00:00");
-                            if (currTime === "00:00" && currQuarter === 4){
-                                setGameRunning(false);
-                                setGameFinished(true);
-                                return currQuarter;
-                            }
+                            // setGameClock("12:00");
                             return currQuarter + 1;
                         });
+                        return "12:00";
                     }
                     return calculateTimeLeft(currTime);
                 });
+                
                 setScoreBoard(currTeamScore => {
                     const score = playerShotDeterminator(Object.values(team1.rosters[2022]).filter((item, idx) => idx < 5));
                     currTeamScore[homeScore].fga++;
@@ -131,6 +128,19 @@ export default function PlayGamePage(): JSX.Element {
                     return currTeamScore;
                 });
 
+                // Loop to check if game has ended
+                setActiveQuarter(currQuarter => {
+                    setGameClock(currTime => {
+                        if (currTime === "00:00" && currQuarter === 4) {
+                            setGameFinished(true);
+                            setGameRunning(false);
+                            return currTime;
+                        }
+                        return currTime;
+                    });
+                    return currQuarter;
+                });
+                
             }, gameSpeed);
             // clear out the interval using the id when unmounting the component
             return () => clearInterval(myInterval);
@@ -186,7 +196,7 @@ export default function PlayGamePage(): JSX.Element {
     }, [gameRunning]);
     
     return(
-        <>
+        <React.Fragment>
             <CourtView shotChartCircles={shotChartCircles} filter={filter}/>
             <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameLog[activeQuarter][gameLog[activeQuarter].length - 1].action} team1={team1} />
             <View style={{ flex: 1.2, height: 30 }}>
@@ -199,7 +209,13 @@ export default function PlayGamePage(): JSX.Element {
                 />
             </View>
             <MenuIndicator index={index} setIndex={setIndex}/>
-            <PlayButton setGameRunning={setGameRunning} gameRunning={gameRunning} gameFinished={gameFinished} setGameSpeed={setGameSpeed}/>
-        </>
+            <PlayButton 
+                setGameRunning={setGameRunning} 
+                gameRunning={gameRunning} 
+                gameFinished={gameFinished} 
+                setGameSpeed={setGameSpeed}
+                scoreBoard={scoreBoard}
+            />
+        </React.Fragment>
     );
 }
