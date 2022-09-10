@@ -10,10 +10,11 @@ import App from "../src/App";
 import renderer from "react-test-renderer";
 import { generateDraftClass } from "../src/utilities/draft/draftClassGenerator";
 import { draftVisualizer, draftPostionVisualizer } from "../src/utilities/testing/draftVisualizer";
+import TeamGenerator from "../src/utilities/testing/teamGenerator";
 
-it("renders correctly", () => {
-    renderer.create(<App />);
-});
+// it("renders correctly", () => {
+//     renderer.create(<App />);
+// });
 
 it("Creates a new Draft Class", () => {
     const draftClass = generateDraftClass();
@@ -24,4 +25,8 @@ it("Creates a new Draft Class", () => {
     });
     draftVisualizer(draftClass);
     draftPostionVisualizer(draftClass);
+});
+
+it("Generates a new Team object", () => {
+    console.log(TeamGenerator());
 });

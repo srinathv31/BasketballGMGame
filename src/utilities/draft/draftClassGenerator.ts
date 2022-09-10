@@ -28,7 +28,7 @@ export function generateDraftClass() {
     return draftClassList;
 }
 
-function generateNewPlayer(listLength: number): PlayerObject {
+export function generateNewPlayer(listLength: number): PlayerObject {
     const playerPosition: Postion[] = generatePosition();
     const playerHeight = generateHeight(playerPosition[0]);
     const playerWeight = generateWeight(playerHeight);
@@ -41,7 +41,7 @@ function generateNewPlayer(listLength: number): PlayerObject {
         teamNumber: randomNumberGenerator(99),
         teams: { 2022: "" },
         salary: { 2022: 0 },
-        awards: { "ROY": 0, "6MOY": 0, "CBPOY": 0, "MIP": 0, "DPOY": 0, "MVP": 0, "CFMVP": 0, "FMVP": 0 },
+        awards: { 2022: [] },
         teamSelections: { general: {}, defensive: {} },
         name: generateName(),
         position: playerPosition,

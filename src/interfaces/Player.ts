@@ -8,7 +8,7 @@ export interface PlayerObject extends Player, PlayerStats, PlayerAttributes, Pla
     teamNumber: number,
     teams: Record<number, string>,
     salary: Record<number, number>,
-    awards: Record<PlayerAward, number>
+    awards: Record<number, PlayerAward[]>
     teamSelections: AllNBASelections
 }
 

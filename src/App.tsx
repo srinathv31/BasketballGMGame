@@ -1,16 +1,24 @@
-import React from "react";
-import {
-    SafeAreaView,
-    StatusBar,
-    Text,
-    useColorScheme,
-    View,
-} from "react-native";
-
+import React, { useState } from "react";
+import { LogBox, SafeAreaView, StatusBar, useColorScheme, useWindowDimensions, View, } from "react-native";
+import { Route, TabView } from "react-native-tab-view";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import Icon from "react-native-vector-icons/Ionicons";
+import BottomMenuTab from "./components/BottomMenuTab";
+import Header from "./components/Header";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { setByValue } from "./redux/indexSlice";
+import NextGamePage from "./screens/NextGamePage";
+import LeaguePage from "./screens/LeaguePage";
+import Overview from "./screens/Overview";
+import RosterPage from "./screens/RosterPage";
+import { PageView } from "./interfaces/Page";
+import { globalPropsContext } from "./hooks/context/GlobalPropContext";
+import PlayGamePage from "./screens/PlayGamePage";
+
+LogBox.ignoreLogs(["Sending"]);
 
 const App = () => {
+    const layout = useWindowDimensions();
+    
     const isDarkMode = useColorScheme() === "dark";
 
     const backgroundStyle = {
@@ -18,14 +26,57 @@ const App = () => {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
 
+    const index = useAppSelector(state => state.indexTracker.value);
+    const dispatch = useAppDispatch();
+
+    const [pageView, setPageView] = useState<PageView>("home");
+
+    const [routes] = useState([
+        { key: "cal", title: "Overview" },
+        { key: "home", title: "Team" },
+        { key: "supp", title: "Game" },
+        { key: "work", title: "League" },
+    ]);
+
+    const renderScene = ({ route }: {
+        route: Route
+    }) => {
+        switch (route.key) {
+            case "home":
+                return <RosterPage />;
+            case "cal":
+                return <Overview />;
+            case "supp":
+                return <NextGamePage />;
+            case "work":
+                return <LeaguePage />;
+            default:
+                return null;
+        }
+    };
+
+    const GlobalProps = { setPageView, pageView };
+
     return (
-        <SafeAreaView style={backgroundStyle}>
-            <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-            <View style={backgroundStyle}>
-                <Text>Pog</Text>
-                <Icon name="mail" size={30} color="#4F8EF7" />
+        <globalPropsContext.Provider value={GlobalProps}>
+            <View style={{ backgroundColor: "crimson", flex: 0.1 }}>
+                <Header/>
             </View>
-        </SafeAreaView>
+            <SafeAreaView style={backgroundStyle}>
+                <StatusBar barStyle={"light-content"} />
+                { pageView === "home" 
+                    ? <TabView
+                        navigationState={{ index, routes }}
+                        renderScene={renderScene}
+                        onIndexChange={(index) => dispatch(setByValue(index))}
+                        initialLayout={{ width: layout.width }}
+                        tabBarPosition="bottom"
+                        renderTabBar={() => index !== 0 && <BottomMenuTab />}
+                    />
+                    : <PlayGamePage />
+                }
+            </SafeAreaView>
+        </globalPropsContext.Provider>
     );
 };
 
