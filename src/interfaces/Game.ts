@@ -2,13 +2,21 @@ import { Team } from "./Team";
 export interface Game {
     home: Team,
     away: Team,
-    teamScore: number,
-    oppScore: number,
+    scoreBoard: ScoreBoard,
     gameNumber: number
 }
 
+export interface GameStatus {
+    possesion: number,
+    gameFinished: boolean,
+    gameLog: Record<number, GameAction[]>,
+    activeQuarter: number,
+    gameClock: string,
+    scoreBoard: ScoreBoard,
+    shotChartCircles: JSX.Element[]
+}
 
-export interface GameData {
+export interface ScoreBoard {
     "home": TeamGameData,
     "away": TeamGameData
 }

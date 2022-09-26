@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ImageBackground, StyleSheet } from "react-native";
 import FGACircle from "../../components/GamePage/FGACircle";
 import PlayButton from "../../components/GamePage/PlayButton";
-import { GameData } from "../../interfaces/Game";
+import { ScoreBoard } from "../../interfaces/Game";
 import { useAppSelector } from "../../redux/hooks";
 import { gameActionGenerator } from "../game/gameActionGenerator";
 import { playerShotDeterminator } from "../../utilities/game/scoring";
@@ -22,7 +22,7 @@ import { playerShotDeterminator } from "../../utilities/game/scoring";
 
 //     const [shotChartCircles, setShotChartCircles] = useState<JSX.Element[]>(shotChartCirclesInit);
 
-//     const [scores1, setScores1] = useState<GameData>({
+//     const [scores1, setScores1] = useState<ScoreBoard>({
 //         "home": {
 //             name: "PHI",
 //             pointsTotal: {

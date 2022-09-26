@@ -3,13 +3,13 @@ import React, { useContext, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { globalPropsContext } from "../../hooks/context/GlobalPropContext";
-import { GameData } from "../../interfaces/Game";
+import { ScoreBoard } from "../../interfaces/Game";
 
 export default function PlayButton({ gameFinished, gameRunning, setGameRunning, setGameSpeed, scoreBoard }: {
     gameFinished: boolean,
     gameRunning: boolean, setGameRunning: (g: boolean) => void,
     setGameSpeed: (s: number) => void,
-    scoreBoard: GameData
+    scoreBoard: ScoreBoard
 }): JSX.Element {
     const { setPageView } = useContext(globalPropsContext);
     

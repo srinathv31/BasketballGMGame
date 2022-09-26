@@ -1,11 +1,11 @@
 // Source Imports
 import React, { SetStateAction } from "react";
 import { View,Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { GameData, ShotChartFilter } from "../../interfaces/Game";
+import { ScoreBoard, ShotChartFilter } from "../../interfaces/Game";
 import { Team } from "../../interfaces/Team";
 
 export default function BoxScore({ scoreBoard, team, setFilter }: {
-    scoreBoard: GameData,
+    scoreBoard: ScoreBoard,
     team: Team,
     setFilter: React.Dispatch<SetStateAction<ShotChartFilter>>
 }): JSX.Element {

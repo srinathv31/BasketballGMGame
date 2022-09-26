@@ -1,10 +1,10 @@
 // Source Imports
 import React, { SetStateAction } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { GameData, ShotAttempt, ShotChartFilter } from "../../interfaces/Game";
+import { ScoreBoard, ShotAttempt, ShotChartFilter } from "../../interfaces/Game";
 
 export default function TeamStats({ scoreBoard, setFilter, filter }: {
-    scoreBoard: GameData,
+    scoreBoard: ScoreBoard,
     setFilter: React.Dispatch<SetStateAction<ShotChartFilter>>, filter: ShotChartFilter
 }): JSX.Element {
     

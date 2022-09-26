@@ -1,4 +1,4 @@
-import { BoxScore, GameData } from "../../interfaces/Game";
+import { BoxScore, ScoreBoard } from "../../interfaces/Game";
 import { Team } from "../../interfaces/Team";
 
 export default function initializeScoreBoard(team1: Team) {
@@ -17,7 +17,7 @@ export default function initializeScoreBoard(team1: Team) {
         };
     });
 
-    const scoreBoard: GameData = {
+    const scoreBoard: ScoreBoard = {
         "home": {
             name: "PHI",
             pointsTotal: {
