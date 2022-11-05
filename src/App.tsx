@@ -4,8 +4,6 @@ import { Route, TabView } from "react-native-tab-view";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import BottomMenuTab from "./components/BottomMenuTab";
 import Header from "./components/Header";
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { setByValue } from "./redux/indexSlice";
 import NextGamePage from "./screens/NextGamePage";
 import LeaguePage from "./screens/LeaguePage";
 import Overview from "./screens/Overview";
@@ -13,6 +11,7 @@ import RosterPage from "./screens/RosterPage";
 import { PageView } from "./interfaces/Page";
 import { globalPropsContext } from "./hooks/context/GlobalPropContext";
 import PlayGamePage from "./screens/PlayGamePage";
+import { useClientStore } from "./zustand/clientStore";
 
 LogBox.ignoreLogs(["Sending"]);
 
@@ -26,8 +25,8 @@ const App = () => {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
 
-    const index = useAppSelector(state => state.indexTracker.value);
-    const dispatch = useAppDispatch();
+    const index = useClientStore(state => state.index);
+    const updateIndex = useClientStore(state => state.updateIndex);
 
     const [pageView, setPageView] = useState<PageView>("home");
 
@@ -68,10 +67,10 @@ const App = () => {
                     ? <TabView
                         navigationState={{ index, routes }}
                         renderScene={renderScene}
-                        onIndexChange={(index) => dispatch(setByValue(index))}
+                        onIndexChange={(index) => updateIndex(index)}
                         initialLayout={{ width: layout.width }}
                         tabBarPosition="bottom"
-                        renderTabBar={() => index !== 0 && <BottomMenuTab />}
+                        renderTabBar={() => <BottomMenuTab />}
                     />
                     : <PlayGamePage />
                 }

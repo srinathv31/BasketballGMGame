@@ -3,14 +3,16 @@ import React, { SetStateAction } from "react";
 import { View,Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { ScoreBoard, ShotChartFilter } from "../../interfaces/Game";
 import { Team } from "../../interfaces/Team";
+import Divider from "../Design/Divider";
 
-export default function BoxScore({ scoreBoard, team, setFilter }: {
+export default function BoxScore({ scoreBoard, teams, setFilter }: {
     scoreBoard: ScoreBoard,
-    team: Team,
+    teams: Team[],
     setFilter: React.Dispatch<SetStateAction<ShotChartFilter>>
 }): JSX.Element {
     
-    const currRoster = Object.values(team.rosters[2022]);
+    const currRoster = Object.values(teams[0].rosters[2022]);
+    const currRoster2 = Object.values(teams[1].rosters[2022]);
     const statHeader = ["MIN", "PTS", "REB", "AST", "BLK", "STL", "TO", "PF"];
 
     function selectFilter(player: string | undefined) {
@@ -46,6 +48,21 @@ export default function BoxScore({ scoreBoard, team, setFilter }: {
                                 <Text style={styles.boxScoreNumber}>{`${player?.teamNumber}`}</Text>
                                 <Text style={styles.boxScoreName}>{`${player?.name}`}</Text>
                                 {Object.values(scoreBoard.home.boxScore[+item]).map((stat, index) => {
+                                    return (
+                                        <Text key={index} style={styles.boxScoreItem}>{stat}</Text>
+                                    );
+                                })}
+                            </TouchableOpacity>
+                        );
+                    })}
+                    <Divider length={"full"} />
+                    {Object.keys(scoreBoard.away.boxScore).map((item, idx) => {
+                        const player = currRoster2.find(player => player.id === +item);
+                        return (
+                            <TouchableOpacity onPress={() => selectFilter(player?.name)} key={idx} style={{ flexDirection: "row", padding: 5,backgroundColor: idx % 2 ? "#eee" : "transparent" }}>
+                                <Text style={styles.boxScoreNumber}>{`${player?.teamNumber}`}</Text>
+                                <Text style={styles.boxScoreName}>{`${player?.name}`}</Text>
+                                {Object.values(scoreBoard.away.boxScore[+item]).map((stat, index) => {
                                     return (
                                         <Text key={index} style={styles.boxScoreItem}>{stat}</Text>
                                     );

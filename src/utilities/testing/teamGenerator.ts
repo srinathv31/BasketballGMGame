@@ -2,10 +2,12 @@ import teamNameList from "../../assets/teamNamesList.json";
 import { PlayerObject } from "../../interfaces/Player";
 import { Team } from "../../interfaces/Team";
 import playerGenerator from "./playerGenerator";
+import playerGenerator2 from "./playerGenerator2";
 
 export default function TeamGenerator() {
     const teamData: Team[] = [];
     const playerList = playerGenerator();
+    const playerList2 = playerGenerator2();
 
     const teamList = [{ name: "PHI", conference: "EAST" }, { name: "NYK", conference: "EAST" }];
 
@@ -14,7 +16,7 @@ export default function TeamGenerator() {
             id: teamData.length,
             name: team.name,
             conference: "EAST",
-            rosters: { 2022: playerList },
+            rosters: { 2022: team.name === "PHI" ? playerList : playerList2 },
             salaryBook: { 2022: calculateSalary(Object.values(playerList)) },
             staff: { 2022: [] },
             owner: {

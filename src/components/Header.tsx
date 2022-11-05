@@ -3,10 +3,10 @@ import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { globalPropsContext } from "../hooks/context/GlobalPropContext";
-import { useAppSelector } from "../redux/hooks";
+import { useClientStore } from "../zustand/clientStore";
 
 export default function Header(): JSX.Element {
-    const index = useAppSelector(state => state.indexTracker.value);
+    const index = useClientStore(state => state.index);
     const { pageView } = useContext(globalPropsContext);
 
     const headerTexts = ["PHI", "PHI", "GAME 1 - 2022", "LEAGUE"];

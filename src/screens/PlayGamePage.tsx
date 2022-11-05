@@ -11,7 +11,7 @@ import PlayButton from "../components/GamePage/PlayButton";
 import Scoreboard from "../components/GamePage/Scoreboard";
 import TeamStats from "../components/GamePage/TeamStats";
 import { GameStatus, ShotChartFilter } from "../interfaces/Game";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useTeamStore } from "../zustand/teamStore";
 import updateBoxScore from "../utilities/game/boxScoreUpdater";
 import { calculateTimeLeft } from "../utilities/game/clock";
 import { gameActionGenerator } from "../utilities/game/gameActionGenerator";
@@ -21,10 +21,11 @@ import { playerShotDeterminator } from "../utilities/game/scoring";
 import { createPointParameters } from "../utilities/game/shotChartGenerator";
 
 export default function PlayGamePage(): JSX.Element {
-    const teams = useAppSelector(state => state.teamsTracker.value);
-    const dispatch = useAppDispatch();
+    const teamBears = useTeamStore((state) => state.teamState);
 
-    const team1 = teams.find(team => team.name === "PHI")!;
+    const team1 = teamBears.find(team => team.name === "PHI")!;
+    const team2 = teamBears.find(team => team.name === "NYK")!;
+    
 
     const [filter, setFilter] = useState<ShotChartFilter>({ filterType: "none" });
 
@@ -37,7 +38,7 @@ export default function PlayGamePage(): JSX.Element {
         gameLog: initializeGameLog(),
         activeQuarter: 1,
         gameClock: "12:00",
-        scoreBoard: initializeScoreBoard(team1),
+        scoreBoard: initializeScoreBoard(team1, team2),
         shotChartCircles: []
     });
 
@@ -55,6 +56,7 @@ export default function PlayGamePage(): JSX.Element {
                     let teamOfPossession: "home" | "away" = "home";
                     teamOfPossession = gameStatusCopy.possesion % 2 ? "home" : "away";
                     gameStatusCopy.possesion++;
+                    const teamPlayers = teamOfPossession === "home" ? team1 : team2;
 
                     // Calculate End of Game
                     if (gameStatusCopy.gameClock === "00:00" && gameStatusCopy.activeQuarter === 4) {
@@ -72,7 +74,7 @@ export default function PlayGamePage(): JSX.Element {
                     gameStatusCopy.gameClock = calculateTimeLeft(gameStatusCopy.gameClock);
 
                     // Calculate Play Type
-                    const score = playerShotDeterminator(Object.values(team1.rosters[2022]).filter((item, idx) => idx < 5));
+                    const score = playerShotDeterminator(Object.values(teamPlayers.rosters[2022]).filter((item, idx) => idx < 5));
                     gameStatusCopy.scoreBoard[teamOfPossession].fga++;
                     score.fga === "threePoint" && gameStatusCopy.scoreBoard[teamOfPossession].tpa++;
                     if (score.score !== 0) {
@@ -106,7 +108,7 @@ export default function PlayGamePage(): JSX.Element {
                     }
 
                     // Update Box Score
-                    updateBoxScore(score.player.id, score.score, gameStatusCopy.scoreBoard, teamOfPossession);
+                    gameStatusCopy.scoreBoard = updateBoxScore(score.player.id, score.score, gameStatusCopy.scoreBoard, teamOfPossession);
 
                     // Update Game Log
                     gameStatusCopy.gameLog[gameStatusCopy.activeQuarter] = [
@@ -149,7 +151,7 @@ export default function PlayGamePage(): JSX.Element {
             case "stat":
                 return <TeamStats scoreBoard={gameStatus.scoreBoard} setFilter={setFilter} filter={filter}/>;
             case "box":
-                return <BoxScore scoreBoard={gameStatus.scoreBoard} team={team1} setFilter={setFilter}/>;
+                return <BoxScore scoreBoard={gameStatus.scoreBoard} teams={[team1, team2]} setFilter={setFilter}/>;
             case "log":
                 return <GameLog gameLog={gameStatus.gameLog} setShotChartCircles={setGameStatus}/>;
             default:
