@@ -108,7 +108,7 @@ export default function PlayGamePage(): JSX.Element {
                     }
 
                     // Update Box Score
-                    gameStatusCopy.scoreBoard = updateBoxScore(score.player.id, score.score, gameStatusCopy.scoreBoard, teamOfPossession);
+                    gameStatusCopy.scoreBoard = updateBoxScore(score, gameStatusCopy.scoreBoard, teamOfPossession);
 
                     // Update Game Log
                     gameStatusCopy.gameLog[gameStatusCopy.activeQuarter] = [
@@ -161,6 +161,9 @@ export default function PlayGamePage(): JSX.Element {
 
     // Hook to enable/disable viewing shots while game is running
     useEffect(() => {
+
+        // Clear all filters
+        setFilter({ filterType: "none" });
 
         setGameStatus(currGameStatus => {
             const currGameStatusCopy = { ...currGameStatus };

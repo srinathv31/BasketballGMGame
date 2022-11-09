@@ -14,7 +14,11 @@ export default function initializeScoreBoard(team1: Team, team2: Team) {
             "BLK": 0,
             "STL": 0,
             "TO": 0,
-            "PF": 0
+            "PF": 0,
+            "FG": 0,
+            "FGM": 0,
+            "3P": 0,
+            "3PM": 0
         };
     });
 
@@ -27,7 +31,11 @@ export default function initializeScoreBoard(team1: Team, team2: Team) {
             "BLK": 0,
             "STL": 0,
             "TO": 0,
-            "PF": 0
+            "PF": 0,
+            "FG": 0,
+            "FGM": 0,
+            "3P": 0,
+            "3PM": 0
         };
     });
 

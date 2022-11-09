@@ -1,7 +1,24 @@
-import { ScoreBoard } from "../../interfaces/Game";
+import { ScoreBoard, ShotData } from "../../interfaces/Game";
 
-export default function updateBoxScore(playerID: number, score: number, scoreBoard: ScoreBoard, team: "home" | "away") {
+export default function updateBoxScore(score: ShotData, scoreBoard: ScoreBoard, team: "home" | "away") {
     const scoreBoardCopy = { ...scoreBoard };
-    scoreBoardCopy[team].boxScore[playerID].PTS += score;
+    const playerID = score.player.id;
+
+    // Update Shot Status
+    // Update Shot Attempt
+    scoreBoardCopy[team].boxScore[playerID].FG++;
+    if (score.fga === "threePoint") {
+        scoreBoardCopy[team].boxScore[playerID]["3P"]++;
+    }
+
+    // Update Shot Made
+    if (score.score > 0) {
+        scoreBoardCopy[team].boxScore[playerID].FGM++;
+    }
+    if (score.score === 3) {
+        scoreBoardCopy[team].boxScore[playerID]["3PM"]++;
+    }
+
+    scoreBoardCopy[team].boxScore[playerID].PTS += score.score;
     return scoreBoardCopy;
 }

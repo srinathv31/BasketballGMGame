@@ -43,7 +43,11 @@ export interface BoxScore {
         "BLK": number,
         "STL": number,
         "TO": number,
-        "PF": number
+        "PF": number,
+        "FG": number,
+        "FGM": number,
+        "3P": number,
+        "3PM": number
     }
 }
 
@@ -56,4 +60,13 @@ export interface GameAction {
 export interface ShotChartFilter {
     filterType: ShotAttempt | "player" | "none",
     playerName?: string
+}
+
+export interface ShotData {
+    fga: ShotAttempt;
+    score: number;
+    player: {
+        name: string;
+        id: number;
+    }
 }

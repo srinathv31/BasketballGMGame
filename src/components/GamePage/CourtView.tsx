@@ -2,6 +2,7 @@
 import React from "react";
 import { ImageBackground, View } from "react-native";
 import { ShotChartFilter } from "../../interfaces/Game";
+import PlayerLabel from "./PlayerLabel";
 // import ReferencePoints from "./ReferencePoints";
 
 export default function CourtView({ shotChartCircles, filter }: {
@@ -11,6 +12,10 @@ export default function CourtView({ shotChartCircles, filter }: {
     return(
         <ImageBackground source={require("../../assets/gameScreen/basketballCourt.jpg")} style={{ flex: 1 }} >
             <View style={{ flex: 1, justifyContent: "space-around", alignItems: "center", flexDirection: "row" }}>
+                {filter.playerName 
+                    ? <PlayerLabel playerName={filter.playerName}/>
+                    : null
+                }
                 {shotChartCircles.filter(item => {
                     if (filter.filterType === "none") {
                         return item;
