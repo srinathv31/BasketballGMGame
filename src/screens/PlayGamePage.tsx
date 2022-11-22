@@ -10,8 +10,9 @@ import MenuIndicator from "../components/GamePage/MenuIndicator";
 import PlayButton from "../components/GamePage/PlayButton";
 import Scoreboard from "../components/GamePage/Scoreboard";
 import TeamStats from "../components/GamePage/TeamStats";
-import { GameAction, GameData, ShotChartFilter } from "../interfaces/Game";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { GameStatus, ShotChartFilter } from "../interfaces/Game";
+import { useTeamStore } from "../zustand/teamStore";
+import updateBoxScore from "../utilities/game/boxScoreUpdater";
 import { calculateTimeLeft } from "../utilities/game/clock";
 import { gameActionGenerator } from "../utilities/game/gameActionGenerator";
 import initializeGameLog from "../utilities/game/initalizeGameLog";
@@ -20,125 +21,107 @@ import { playerShotDeterminator } from "../utilities/game/scoring";
 import { createPointParameters } from "../utilities/game/shotChartGenerator";
 
 export default function PlayGamePage(): JSX.Element {
-    const teams = useAppSelector(state => state.teamsTracker.value);
-    const dispatch = useAppDispatch();
+    const teamBears = useTeamStore((state) => state.teamState);
 
-    const team1 = teams.find(team => team.name === "PHI")!;
-
-    const [shotChartCircles, setShotChartCircles] = useState<JSX.Element[]>([]);
+    const team1 = teamBears.find(team => team.name === "PHI")!;
+    const team2 = teamBears.find(team => team.name === "NYK")!;
     
-    const [scoreBoard, setScoreBoard] = useState<GameData>(initializeScoreBoard(team1));
+
     const [filter, setFilter] = useState<ShotChartFilter>({ filterType: "none" });
 
-    const [possession, setPossession] = useState<number>(0);
     const [gameRunning, setGameRunning] = useState<boolean>(false);
-    const [gameFinished, setGameFinished] = useState<boolean>(false);
     const [gameSpeed, setGameSpeed] = useState<number>(1000);
-    const [gameLog, setGameLog] = useState<Record<number, GameAction[]>>(initializeGameLog());
-    const [activeQuarter, setActiveQuarter] = useState<number>(1);
-    const [gameClock, setGameClock] = useState<string>("12:00");
+
+    const [gameStatus, setGameStatus] = useState<GameStatus>({
+        possesion: 0,
+        gameFinished: false,
+        gameLog: initializeGameLog(),
+        activeQuarter: 1,
+        gameClock: "12:00",
+        scoreBoard: initializeScoreBoard(team1, team2),
+        shotChartCircles: []
+    });
 
     useEffect(() => {
         if (gameRunning) {
             // Remove any Popovers
-            setShotChartCircles(currChart => {
-                return currChart.filter(shot => shot.props["active"] !== true);
-            });
+            gameStatus.shotChartCircles = gameStatus.shotChartCircles.filter(shot => shot.props["active"] !== true);
+
             // create a interval and get the id
             const myInterval = setInterval(() => {
-                let homeScore: "home" | "away" = "home";
-                setPossession(currPossession => {
-                    currPossession % 2 ? 
-                        homeScore = "home" :
-                        homeScore = "away";
+                setGameStatus(currGameStatus => {
+                    const gameStatusCopy = { ...currGameStatus } as GameStatus;
 
-                    return currPossession + 1;
-                });
-                setGameClock(currTime => {
-                    if (currTime === "00:00"){
-                        setActiveQuarter(currQuarter => {
-                            // setGameClock("12:00");
-                            return currQuarter + 1;
-                        });
-                        return "12:00";
+                    // Calculate Possession
+                    let teamOfPossession: "home" | "away" = "home";
+                    teamOfPossession = gameStatusCopy.possesion % 2 ? "home" : "away";
+                    gameStatusCopy.possesion++;
+                    const teamPlayers = teamOfPossession === "home" ? team1 : team2;
+
+                    // Calculate End of Game
+                    if (gameStatusCopy.gameClock === "00:00" && gameStatusCopy.activeQuarter === 4) {
+                        console.log("END");
+                        gameStatusCopy.gameFinished = true;
+                        setGameRunning(false);
+                        return gameStatusCopy;
                     }
-                    return calculateTimeLeft(currTime);
-                });
-                
-                setScoreBoard(currTeamScore => {
-                    const score = playerShotDeterminator(Object.values(team1.rosters[2022]).filter((item, idx) => idx < 5));
-                    currTeamScore[homeScore].fga++;
-                    score.fga === "threePoint" && currTeamScore[homeScore].tpa++;
+
+                    // Calculate Time
+                    if (gameStatusCopy.gameClock === "00:00") {
+                        gameStatusCopy.activeQuarter++;
+                        gameStatusCopy.gameClock = "12:00";
+                    }
+                    const gameClockObject = calculateTimeLeft(gameStatusCopy.gameClock);
+                    gameStatusCopy.gameClock = gameClockObject.gameClock;
+
+                    // Calculate Play Type
+                    const score = playerShotDeterminator(Object.values(teamPlayers.rosters[2022]).filter((item, idx) => idx < 5));
+                    gameStatusCopy.scoreBoard[teamOfPossession].fga++;
+                    score.fga === "threePoint" && gameStatusCopy.scoreBoard[teamOfPossession].tpa++;
                     if (score.score !== 0) {
-                        currTeamScore[homeScore].fgm++;
-                        score.fga === "threePoint" && currTeamScore[homeScore].tpm++;
+                        gameStatusCopy.scoreBoard[teamOfPossession].fgm++;
+                        score.fga === "threePoint" && gameStatusCopy.scoreBoard[teamOfPossession].tpm++;
                     }
                     if (score.score !== 1) {
-                        setShotChartCircles(currShotChart => {
-                            const pointParameters = createPointParameters(score.fga);
-                            return [ 
-                                ...currShotChart, 
-                                <FGACircle 
-                                    key={currShotChart.length} 
-                                    pointParameters={pointParameters} 
-                                    fgm={score.score !== 0} 
-                                    fgtype={score.fga} 
-                                    teamColor={homeScore === "home" ? "crimson" : "orangered"} 
-                                    home={homeScore === "home"} 
-                                    player={score.player} 
-                                    active={false} 
-                                    shotID={currShotChart.length}
-                                    setShotChartCircles={setShotChartCircles}
-                                    gameRunning={true}
-                                /> ];
-                        });
+                        const pointParameters = createPointParameters(score.fga);
+                        gameStatusCopy.shotChartCircles.push(
+                            <FGACircle 
+                                key={gameStatusCopy.shotChartCircles.length} 
+                                pointParameters={pointParameters} 
+                                fgm={score.score !== 0} 
+                                fgtype={score.fga} 
+                                teamColor={teamOfPossession === "home" ? "crimson" : "orangered"} 
+                                home={teamOfPossession === "home"} 
+                                player={score.player.name} 
+                                active={false} 
+                                shotID={gameStatusCopy.shotChartCircles.length}
+                                setShotChartCircles={setGameStatus}
+                                gameRunning={true}
+                            />
+                        );
                     }
-                    
-                    setActiveQuarter(currQuarter => { 
-                        // Run score function inside of setActiveQuarter to access activeQuarter value
-                        setGameClock(currTime => {
-                            // Run Game Log function inside of setGameClock to access gameClock value
-                            setShotChartCircles(currShotChart => {
-                                setGameLog(currGameLog => {
-                                    // Update ScoreBoard
-                                    currTeamScore[homeScore].pointsTotal = addScore(currTeamScore[homeScore].pointsTotal, score.score, currQuarter);
-                                    const leadOverOpp = currTeamScore[homeScore].pointsTotal["Total"] - currTeamScore[homeScore === "home" ? "away" : "home"].pointsTotal["Total"];
-                                    if (leadOverOpp > currTeamScore[homeScore].biggestLead) {
-                                        currTeamScore[homeScore].biggestLead = leadOverOpp;
-                                    }
-                                    // Update Game Log
-                                    const currGameLogCopy = { ...currGameLog };
-                                    currGameLogCopy[currQuarter] = [
-                                        ...currGameLogCopy[currQuarter],
-                                        { 
-                                            action: `Q${currQuarter} | ${currTime}: ${gameActionGenerator(score.score, currTeamScore[homeScore].name, score.fga, score.player!)}`, 
-                                            shotID: currShotChart.length-1,
-                                            gameScore: `${currTeamScore["home"].pointsTotal["Total"]} - ${currTeamScore["away"].pointsTotal["Total"]}`
-                                        }
-                                    ];
-                                    return currGameLogCopy;
-                                });
-                                return currShotChart;
-                            });
-                            return currTime;
-                        });
-                        
-                        return currQuarter;
-                    });
-                    return currTeamScore;
-                });
 
-                // Loop to check if game has ended
-                setActiveQuarter(currQuarter => {
-                    setGameClock(currTime => {
-                        if (currTime === "00:00" && currQuarter === 4) {
-                            setGameFinished(true);
-                            setGameRunning(false);
-                            return currTime;
+                    // Update ScoreBoard
+                    gameStatusCopy.scoreBoard[teamOfPossession].pointsTotal = addScore(gameStatusCopy.scoreBoard[teamOfPossession].pointsTotal, score.score, currGameStatus.activeQuarter);
+                    const leadOverOpp = gameStatusCopy.scoreBoard[teamOfPossession].pointsTotal["Total"] - gameStatusCopy.scoreBoard[teamOfPossession === "home" ? "away" : "home"].pointsTotal["Total"];
+                    if (leadOverOpp > gameStatusCopy.scoreBoard[teamOfPossession].biggestLead) {
+                        gameStatusCopy.scoreBoard[teamOfPossession].biggestLead = leadOverOpp;
+                    }
+
+                    // Update Box Score
+                    gameStatusCopy.scoreBoard = updateBoxScore(score, gameStatusCopy.scoreBoard, teamOfPossession, gameClockObject.timeOfPossession);
+
+                    // Update Game Log
+                    gameStatusCopy.gameLog[gameStatusCopy.activeQuarter] = [
+                        ...gameStatusCopy.gameLog[gameStatusCopy.activeQuarter],
+                        { 
+                            action: `Q${gameStatusCopy.activeQuarter} | ${gameStatusCopy.gameClock}: ${gameActionGenerator(score.score, gameStatusCopy.scoreBoard[teamOfPossession].name, score.fga, score.player.name!)}`, 
+                            shotID: gameStatusCopy.shotChartCircles.length-1,
+                            gameScore: `${gameStatusCopy.scoreBoard["home"].pointsTotal["Total"]} - ${gameStatusCopy.scoreBoard["away"].pointsTotal["Total"]}`
                         }
-                        return currTime;
-                    });
-                    return currQuarter;
+                    ];
+
+                    return gameStatusCopy;
                 });
                 
             }, gameSpeed);
@@ -167,11 +150,11 @@ export default function PlayGamePage(): JSX.Element {
     }) => {
         switch (route.key) {
             case "stat":
-                return <TeamStats scoreBoard={scoreBoard} setFilter={setFilter} filter={filter}/>;
+                return <TeamStats scoreBoard={gameStatus.scoreBoard} setFilter={setFilter} filter={filter}/>;
             case "box":
-                return <BoxScore scoreBoard={scoreBoard} team={team1} setFilter={setFilter}/>;
+                return <BoxScore scoreBoard={gameStatus.scoreBoard} teams={[team1, team2]} setFilter={setFilter}/>;
             case "log":
-                return <GameLog gameLog={gameLog} setShotChartCircles={setShotChartCircles}/>;
+                return <GameLog gameLog={gameStatus.gameLog} setShotChartCircles={setGameStatus}/>;
             default:
                 return null;
         }
@@ -180,8 +163,12 @@ export default function PlayGamePage(): JSX.Element {
     // Hook to enable/disable viewing shots while game is running
     useEffect(() => {
 
-        setShotChartCircles(currChart => {
-            const shotChartCirclesCopy = [ ...currChart ];
+        // Clear all filters
+        setFilter({ filterType: "none" });
+
+        setGameStatus(currGameStatus => {
+            const currGameStatusCopy = { ...currGameStatus };
+            const shotChartCirclesCopy = [ ...currGameStatus.shotChartCircles ];
     
             // enable/disable all Popovers
             shotChartCirclesCopy.forEach((shot, idx) => {
@@ -190,15 +177,17 @@ export default function PlayGamePage(): JSX.Element {
                     { "gameRunning": gameRunning }
                 );
             });
-            return shotChartCirclesCopy;
+
+            currGameStatusCopy.shotChartCircles = shotChartCirclesCopy;
+            return currGameStatusCopy;
         });
 
     }, [gameRunning]);
     
     return(
         <React.Fragment>
-            <CourtView shotChartCircles={shotChartCircles} filter={filter}/>
-            <Scoreboard scoreBoard={scoreBoard} activeQuarter={activeQuarter} gameFinished={gameFinished} gameClock={gameClock} gameAction={gameLog[activeQuarter][gameLog[activeQuarter].length - 1].action} team1={team1} />
+            <CourtView shotChartCircles={gameStatus.shotChartCircles} filter={filter}/>
+            <Scoreboard scoreBoard={gameStatus.scoreBoard} activeQuarter={gameStatus.activeQuarter} gameFinished={gameStatus.gameFinished} gameClock={gameStatus.gameClock} gameAction={gameStatus.gameLog[gameStatus.activeQuarter][gameStatus.gameLog[gameStatus.activeQuarter].length - 1].action} team1={team1} />
             <View style={{ flex: 1.2, height: 30 }}>
                 <TabView
                     navigationState={{ index, routes }}
@@ -212,9 +201,9 @@ export default function PlayGamePage(): JSX.Element {
             <PlayButton 
                 setGameRunning={setGameRunning} 
                 gameRunning={gameRunning} 
-                gameFinished={gameFinished} 
+                gameFinished={gameStatus.gameFinished} 
                 setGameSpeed={setGameSpeed}
-                scoreBoard={scoreBoard}
+                scoreBoard={gameStatus.scoreBoard}
             />
         </React.Fragment>
     );

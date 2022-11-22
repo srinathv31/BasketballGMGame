@@ -3,7 +3,7 @@ import React, { SetStateAction } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Popover, { PopoverMode } from "react-native-popover-view";
 import Svg, { Circle } from "react-native-svg";
-import { ShotAttempt } from "../../interfaces/Game";
+import { GameStatus, ShotAttempt } from "../../interfaces/Game";
 
 export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameters, player, active, shotID, setShotChartCircles, gameRunning }: {
     fgm: boolean,
@@ -14,17 +14,20 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
     player: string,
     active: boolean,
     shotID: number,
-    setShotChartCircles: React.Dispatch<SetStateAction<JSX.Element[]>>,
+    setShotChartCircles: React.Dispatch<SetStateAction<GameStatus>>,
     gameRunning: boolean
 }): JSX.Element {
 
     function findShotOnCourt() {
-        setShotChartCircles(currChart => {
-            const shotChartCirclesCopy = [ ...currChart ];
+        setShotChartCircles(currGameStatus => {
+            const currGameStatusCopy = { ...currGameStatus };
+            const shotChartCirclesCopy = [ ...currGameStatus.shotChartCircles ];
             const lastElement = shotChartCirclesCopy[shotChartCirclesCopy.length-1];
 
             if (lastElement.props["active"] === true && lastElement.props["shotID"] === shotID) {
-                return shotChartCirclesCopy.splice(0, shotChartCirclesCopy.length-1);
+                shotChartCirclesCopy.pop();
+                currGameStatusCopy.shotChartCircles = shotChartCirclesCopy;
+                return currGameStatusCopy;
             }
 
             // Remove any duplicates
@@ -32,16 +35,19 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
 
             // Duplicate selected shot to layer on top of everything else
             filteredList.push(React.cloneElement(
-                currChart[shotID],
+                currGameStatus.shotChartCircles[shotID],
                 { "active": true }
             ));
-            return filteredList;
+
+            currGameStatusCopy.shotChartCircles = filteredList;
+            return currGameStatusCopy;
         });
     }
     
     function closePopover() {
-        setShotChartCircles(currChart => {
-            const shotChartCirclesCopy = [ ...currChart ];
+        setShotChartCircles(currGameStatus => {
+            const currGameStatusCopy = { ...currGameStatus };
+            const shotChartCirclesCopy = [ ...currGameStatus.shotChartCircles ];
 
             // Hide all other Popovers
             shotChartCirclesCopy.forEach((shot, idx) => {
@@ -50,7 +56,9 @@ export default function FGACircle({ fgm, fgtype, teamColor, home, pointParameter
                     { "active": false }
                 );
             });
-            return shotChartCirclesCopy;
+            
+            currGameStatusCopy.shotChartCircles = shotChartCirclesCopy;
+            return currGameStatusCopy;
         });
     }
 

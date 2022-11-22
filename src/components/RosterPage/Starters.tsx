@@ -1,14 +1,14 @@
 // Source Imports
 import React from "react";
 import { View, Text } from "react-native";
-import { useAppSelector } from "../../redux/hooks";
+import { useTeamStore } from "../../zustand/teamStore";
 import Divider from "../Design/Divider";
 import PlayerRosterCard from "./PlayerRosterCard";
 
 export default function Starters(): JSX.Element {
-    const teams = useAppSelector(state => state.teamsTracker.value);
+    const teamBear = useTeamStore(state => state.teamState);
 
-    const playerList = Object.values(teams[0].rosters[2022]);
+    const playerList = Object.values(teamBear[0].rosters[2022]);
 
     return(
         <>

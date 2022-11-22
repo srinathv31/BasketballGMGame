@@ -1,12 +1,12 @@
 // Source Imports
 import React, { SetStateAction, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import { GameAction } from "../../interfaces/Game";
+import { GameAction, GameStatus } from "../../interfaces/Game";
 import GamelogMenuTab from "./GameLogMenuTab";
 
 export default function GameLog({ gameLog, setShotChartCircles }: {
     gameLog: Record<number, GameAction[]>,
-    setShotChartCircles: React.Dispatch<SetStateAction<JSX.Element[]>>
+    setShotChartCircles: React.Dispatch<SetStateAction<GameStatus>>
 }): JSX.Element {
     const [selectedQuarter, setSelectedQuarter] = useState<number>(0);
 
@@ -14,12 +14,15 @@ export default function GameLog({ gameLog, setShotChartCircles }: {
         if (shotID === undefined) {
             return;
         }
-        setShotChartCircles(currChart => {
-            const shotChartCirclesCopy = [ ...currChart ];
+        setShotChartCircles(currGameStatus => {
+            const currGameStatusCopy = { ...currGameStatus };
+            const shotChartCirclesCopy = [ ...currGameStatus.shotChartCircles ];
             const lastElement = shotChartCirclesCopy[shotChartCirclesCopy.length-1];
 
             if (lastElement.props["active"] === true && lastElement.props["shotID"] === shotID) {
-                return shotChartCirclesCopy.splice(0, shotChartCirclesCopy.length-1);
+                shotChartCirclesCopy.pop();
+                currGameStatusCopy.shotChartCircles = shotChartCirclesCopy;
+                return currGameStatusCopy;
             }
 
             // Remove any duplicates
@@ -27,10 +30,12 @@ export default function GameLog({ gameLog, setShotChartCircles }: {
 
             // Duplicate selected shot to layer on top of everything else
             filteredList.push(React.cloneElement(
-                currChart[shotID],
+                currGameStatus.shotChartCircles[shotID],
                 { "active": true }
             ));
-            return filteredList;
+
+            currGameStatusCopy.shotChartCircles = filteredList;
+            return currGameStatusCopy;
         });
     }
 

@@ -2,13 +2,21 @@ import { Team } from "./Team";
 export interface Game {
     home: Team,
     away: Team,
-    teamScore: number,
-    oppScore: number,
+    scoreBoard: ScoreBoard,
     gameNumber: number
 }
 
+export interface GameStatus {
+    possesion: number,
+    gameFinished: boolean,
+    gameLog: Record<number, GameAction[]>,
+    activeQuarter: number,
+    gameClock: string,
+    scoreBoard: ScoreBoard,
+    shotChartCircles: JSX.Element[]
+}
 
-export interface GameData {
+export interface ScoreBoard {
     "home": TeamGameData,
     "away": TeamGameData
 }
@@ -35,7 +43,11 @@ export interface BoxScore {
         "BLK": number,
         "STL": number,
         "TO": number,
-        "PF": number
+        "PF": number,
+        "FG": number,
+        "FGM": number,
+        "3P": number,
+        "3PM": number
     }
 }
 
@@ -48,4 +60,13 @@ export interface GameAction {
 export interface ShotChartFilter {
     filterType: ShotAttempt | "player" | "none",
     playerName?: string
+}
+
+export interface ShotData {
+    fga: ShotAttempt;
+    score: number;
+    player: {
+        name: string;
+        id: number;
+    }
 }

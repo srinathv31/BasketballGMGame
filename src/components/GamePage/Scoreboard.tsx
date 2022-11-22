@@ -1,11 +1,11 @@
 // Source Imports
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { GameData } from "../../interfaces/Game";
+import { ScoreBoard } from "../../interfaces/Game";
 import { Team } from "../../interfaces/Team";
 
 export default function Scoreboard({ scoreBoard, activeQuarter, gameFinished, gameClock, gameAction, team1 }: {
-    scoreBoard: GameData,
+    scoreBoard: ScoreBoard,
     activeQuarter: number,
     gameFinished: boolean,
     gameClock: string,

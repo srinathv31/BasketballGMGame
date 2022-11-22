@@ -2,13 +2,13 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { Postion } from "../../interfaces/Player";
-import { useAppSelector } from "../../redux/hooks";
+import { useTeamStore } from "../../zustand/teamStore";
 
 export default function PositionCount(): JSX.Element {
-    const teams = useAppSelector(state => state.teamsTracker.value);
+    const teamBears = useTeamStore(state => state.teamState);
     
     function positionCountCalculation(position: Postion) {
-        return Object.values(teams[0].rosters[2022]).reduce((acc, curr) => {
+        return Object.values(teamBears[0].rosters[2022]).reduce((acc, curr) => {
             if (curr.position[0] === position) {
                 acc++;
             }
