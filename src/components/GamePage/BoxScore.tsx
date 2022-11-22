@@ -41,6 +41,8 @@ export default function BoxScore({ scoreBoard, teams, setFilter }: {
                 return <Text style={styles.boxScoreItem}>{`${scoreBoard[activeTab].boxScore[+item].FGM}-${scoreBoard[activeTab].boxScore[+item].FG}`}</Text>; 
             case "3P":
                 return <Text style={styles.boxScoreItem}>{`${scoreBoard[activeTab].boxScore[+item]["3PM"]}-${scoreBoard[activeTab].boxScore[+item]["3P"]}`}</Text>;
+            case "MIN":
+                return <Text style={styles.boxScoreItem}>{`${Math.round((scoreBoard[activeTab].boxScore[+item]["MIN"])/60)}`}</Text>;
             case "FGM":
             case "3PM":
                 return null;

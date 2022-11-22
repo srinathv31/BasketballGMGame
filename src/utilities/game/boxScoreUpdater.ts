@@ -1,8 +1,15 @@
 import { ScoreBoard, ShotData } from "../../interfaces/Game";
 
-export default function updateBoxScore(score: ShotData, scoreBoard: ScoreBoard, team: "home" | "away") {
+export default function updateBoxScore(score: ShotData, scoreBoard: ScoreBoard, team: "home" | "away", timeOfPossession: number) {
     const scoreBoardCopy = { ...scoreBoard };
     const playerID = score.player.id;
+
+    // Update players' minutes (MIN is in seconds)
+    Object.keys(scoreBoardCopy).forEach((team) => {
+        Object.keys(scoreBoardCopy[team as keyof ScoreBoard].boxScore).forEach(player => {
+            scoreBoardCopy[team as keyof ScoreBoard].boxScore[+player].MIN += timeOfPossession;
+        });
+    });
 
     // Update Shot Status
     // Update Shot Attempt

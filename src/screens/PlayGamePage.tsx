@@ -71,7 +71,8 @@ export default function PlayGamePage(): JSX.Element {
                         gameStatusCopy.activeQuarter++;
                         gameStatusCopy.gameClock = "12:00";
                     }
-                    gameStatusCopy.gameClock = calculateTimeLeft(gameStatusCopy.gameClock);
+                    const gameClockObject = calculateTimeLeft(gameStatusCopy.gameClock);
+                    gameStatusCopy.gameClock = gameClockObject.gameClock;
 
                     // Calculate Play Type
                     const score = playerShotDeterminator(Object.values(teamPlayers.rosters[2022]).filter((item, idx) => idx < 5));
@@ -108,7 +109,7 @@ export default function PlayGamePage(): JSX.Element {
                     }
 
                     // Update Box Score
-                    gameStatusCopy.scoreBoard = updateBoxScore(score, gameStatusCopy.scoreBoard, teamOfPossession);
+                    gameStatusCopy.scoreBoard = updateBoxScore(score, gameStatusCopy.scoreBoard, teamOfPossession, gameClockObject.timeOfPossession);
 
                     // Update Game Log
                     gameStatusCopy.gameLog[gameStatusCopy.activeQuarter] = [

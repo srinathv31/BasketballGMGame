@@ -1,6 +1,6 @@
 import { randomNumberGenerator } from "../randomNumberGenerator";
 
-export function calculateTimeLeft(currTime: string) {
+export function calculateTimeLeft(currTime: string): { gameClock: string, timeOfPossession: number } {
     // Grab minutes and seconds from string
     const minutes = currTime.slice(0,2);
     const seconds = currTime.slice(3,5);
@@ -11,7 +11,7 @@ export function calculateTimeLeft(currTime: string) {
     const timeOfPossesion = randomNumberGenerator(24, 7);
 
     if (totalTimeInSeconds < timeOfPossesion){
-        return "00:00";
+        return { gameClock: "00:00", timeOfPossession: totalTimeInSeconds };
     }
 
     const secondsRem = Math.floor(totalTimeInSeconds - timeOfPossesion);
@@ -25,5 +25,5 @@ export function calculateTimeLeft(currTime: string) {
     const strSecond = newSeconds < 10 ? "0"+newSeconds : newSeconds === 60 ? "59" : newSeconds;
 
     // console.log(`${strMinute}:${strSecond}`);
-    return `${strMinute}:${strSecond}`;
+    return { gameClock: `${strMinute}:${strSecond}`, timeOfPossession: timeOfPossesion };
 }
