@@ -18,7 +18,9 @@ export default function Scoreboard({ scoreBoard, activeQuarter, gameFinished, ga
                 <Text style={[styles.speedButton, { backgroundColor: "transparent" }]}>Q:</Text>
                 {Object.keys(scoreBoard.home.pointsTotal).map((item, idx) => {
                     return (
-                        <Text key={idx} style={[styles.speedButton, { backgroundColor: ""+activeQuarter === item ? "crimson" : "transparent" }]}>{item !== "Total" && item}</Text>
+                        <Text key={idx} style={[styles.speedButton, { backgroundColor: ""+activeQuarter === item ? "crimson" : "transparent", color: ""+activeQuarter === item ? "white" : "black" }]}>
+                            {item !== "Total" && item}
+                        </Text>
                     );
                 })}
             </View>
@@ -59,6 +61,9 @@ const styles = StyleSheet.create({
     speedButton: {
         padding: 5,
         paddingHorizontal: 10,
-        alignSelf: "center"
+        alignSelf: "center",
+        borderRadius: 5,
+        overflow: "hidden",
+        fontWeight: "bold"
     }
 });

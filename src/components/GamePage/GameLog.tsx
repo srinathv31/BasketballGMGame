@@ -1,6 +1,6 @@
 // Source Imports
 import React, { SetStateAction, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { GameAction, GameStatus } from "../../interfaces/Game";
 import GamelogMenuTab from "./GameLogMenuTab";
 
@@ -45,14 +45,14 @@ export default function GameLog({ gameLog, setShotChartCircles }: {
             <FlatList
                 data={
                     selectedQuarter === 0 
-                        ? [...gameLog[1], ...gameLog[2], ...gameLog[3], ...gameLog[4], ...gameLog[5]] 
+                        ? Object.values(gameLog).map(quarterLog => quarterLog.length > 1 ? quarterLog : []).flat(1)
                         : gameLog[selectedQuarter]
                 }
                 renderItem={({ item, index }) => {
                     return (
-                        <View style={{ flexDirection: "row", flex: 1, backgroundColor: item.action.includes("Quarter") || item.action.includes("Overtime") ? "#fbded9" : index % 2 ? "lightgrey" : "transparent" }}>
+                        <View style={{ flexDirection: "row", flex: 1, padding: 5, backgroundColor: item.action.includes("Quarter") || item.action.includes("Overtime") ? "crimson" : index % 2 ? "#eee" : "transparent" }}>
                             {item.action.includes("Quarter") || item.action.includes("Overtime")
-                                ? <Text style={{ padding: 5, textAlign: "center", width: "100%", fontWeight: "400", fontSize: 18 }}>{item.action}</Text>
+                                ? <Text style={styles.quarterHeader}>{item.action.toLocaleUpperCase()}</Text>
                                 : <TouchableOpacity onPress={() => findShotOnCourt(item.shotID)} style={{ flexDirection: "row", width: "60%" }}>
                                     <Text style={{ padding: 5, textAlign: "left", width: 85, fontSize: 12 }}>{[ ...item.action ].splice(0, 11)}</Text>
                                     <Text style={{ padding: 5, textAlign: "center", fontSize: 12 }}>{[ ...item.action ].splice(12, item.action.length)}</Text>
@@ -66,3 +66,14 @@ export default function GameLog({ gameLog, setShotChartCircles }: {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    quarterHeader: {
+        padding: 5, 
+        textAlign: "center", 
+        width: "100%", 
+        fontWeight: "bold", 
+        fontSize: 18,
+        color: "white"
+    }
+});

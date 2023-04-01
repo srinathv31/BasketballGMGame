@@ -1,6 +1,6 @@
 // Source Imports
 import React, { SetStateAction } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { ScoreBoard, ShotAttempt, ShotChartFilter } from "../../interfaces/Game";
 
 export default function TeamStats({ scoreBoard, setFilter, filter }: {
@@ -48,7 +48,9 @@ export default function TeamStats({ scoreBoard, setFilter, filter }: {
                             : <Text style={{ alignSelf: "center", width: 50 }}>{`${scoreBoard.home[item.statKey]}`}</Text>
                         }
                         <TouchableOpacity onPress={() => selectFilter(item.shotType)}>
-                            <Text style={{ width: 100, textAlign: "center", backgroundColor: filter.filterType === item.shotType ? "crimson" : "transparent" }}>{item.label}</Text>
+                            <Text style={[styles.statLabel, { backgroundColor: filter.filterType === item.shotType ? "crimson" : "transparent", color: filter.filterType === item.shotType ? "white" : "black" }]}>
+                                {item.label}
+                            </Text>
                         </TouchableOpacity>
                         { item.statKeyAtt !== undefined
                             ? <Text style={{ alignSelf: "center", width: 50, textAlign: "right" }}>{`${scoreBoard.away[item.statKey]}/${scoreBoard.away[item.statKeyAtt]}`}</Text>
@@ -60,3 +62,13 @@ export default function TeamStats({ scoreBoard, setFilter, filter }: {
         </>
     );
 }
+
+const styles = StyleSheet.create({
+    statLabel: {
+        width: 110, 
+        textAlign: "center",
+        borderRadius: 5,
+        overflow: "hidden",
+        fontWeight: "bold"
+    }
+});

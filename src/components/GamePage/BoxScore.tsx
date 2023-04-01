@@ -61,8 +61,10 @@ export default function BoxScore({ scoreBoard, teams, setFilter }: {
                         <Text style={{ width: 165 }}>{""}</Text>
                         <View style={{ flexDirection: "row" }}>
                             {statHeader.map((label, idx) => {
+                                const headerSelected = isStatSelected(label, statSort);
+                                const tabColor = activeTab === "home" ? "crimson" : "orangered"; 
                                 return (
-                                    <Text onPress={() => sortBoxScore(label, setStatSort)} key={idx} style={[styles.boxScoreItem, { backgroundColor: isStatSelected(label, statSort) ? "red" : "transparent" }]}>{label}</Text>
+                                    <Text onPress={() => sortBoxScore(label, setStatSort)} key={idx} style={[styles.boxScoreHeader, { backgroundColor: headerSelected ? tabColor : "transparent", color: headerSelected ? "white" : "black" }]}>{label}</Text>
                                 );
                             })}
                         </View>
@@ -71,7 +73,7 @@ export default function BoxScore({ scoreBoard, teams, setFilter }: {
                         {Object.keys(scoreBoard[activeTab].boxScore).sort((a, b) => scoreBoard[activeTab].boxScore[+b][statSort] - scoreBoard[activeTab].boxScore[+a][statSort]).map((item, idx) => {
                             const player = currRoster[activeTab].find(player => player.id === +item);
                             return (
-                                <TouchableOpacity onPress={() => selectFilter(player?.name)} key={idx} style={{ flexDirection: "row", padding: 5,backgroundColor: idx % 2 ? "#eee" : "transparent" }}>
+                                <TouchableOpacity onPress={() => selectFilter(player?.name)} key={idx} style={{ flexDirection: "row", padding: 5, backgroundColor: idx % 2 ? "#eee" : "transparent" }}>
                                     <Text style={styles.boxScoreNumber}>{`${player?.teamNumber}`}</Text>
                                     <Text style={styles.boxScoreName}>{`${player?.name}`}</Text>
                                     {Object.keys(scoreBoard[activeTab].boxScore[+item]).map((stat, index) => {
@@ -99,11 +101,20 @@ const styles = StyleSheet.create({
     boxScoreNumber: {
         width: 30,
         textAlign: "center",
-        fontStyle: "italic"
+        fontStyle: "italic",
+        fontWeight: "bold"
     },
     boxScoreItem: {
         width: 40,
         textAlign: "center"
+    },
+    boxScoreHeader: {
+        width: 40,
+        textAlign: "center",
+        fontWeight: "bold",
+        padding: 2,
+        borderRadius: 5,
+        overflow: "hidden",
     },
     statHeader: {
         backgroundColor: Colors.lighter,

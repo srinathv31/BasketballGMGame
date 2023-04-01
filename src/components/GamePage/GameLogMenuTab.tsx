@@ -1,6 +1,6 @@
 // Source Imports
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function GamelogMenuTab({ selectedQuarter, setSelectedQuarter }: {
     selectedQuarter: number, setSelectedQuarter: (q: number) => void
@@ -10,7 +10,6 @@ export default function GamelogMenuTab({ selectedQuarter, setSelectedQuarter }: 
 
     return(
         <View>
-            <Text style={{ textAlign: "center", padding: 5 }}>Game Log</Text>
             <View style={{ flexDirection: "row", justifyContent: "space-evenly", padding: 5 }}>
                 {tabOptions.map((option, idx) => {
                     return (
@@ -19,7 +18,7 @@ export default function GamelogMenuTab({ selectedQuarter, setSelectedQuarter }: 
                             key={idx} 
                             style={{ borderColor: "black", borderBottomWidth: selectedQuarter === idx ? 1 : 0 }}
                         >
-                            <Text>{option}</Text>
+                            <Text style={styles.tabOptions}>{option}</Text>
                         </TouchableOpacity>
                     );
                 })}
@@ -27,3 +26,10 @@ export default function GamelogMenuTab({ selectedQuarter, setSelectedQuarter }: 
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    tabOptions: {
+        borderColor: "black",
+        fontWeight: "bold"
+    }
+});
