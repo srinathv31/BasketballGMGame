@@ -9,6 +9,7 @@ import FGACircle from "../../components/GamePage/FGACircle";
 import { Team } from "../../interfaces/Team";
 import reboundDeterminator from "./rebound";
 
+// TODO: Convert Game Engine to be self-encapsulating returning an object of things
 export default function GameEngine({ currGameStatus, team1, team2, setGameRunning, setGameStatus }: {
     currGameStatus: GameStatus,
     team1: Team, team2: Team,
