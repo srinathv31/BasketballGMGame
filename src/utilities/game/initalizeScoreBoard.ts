@@ -53,6 +53,7 @@ export default function initializeScoreBoard(team1: Team, team2: Team) {
             "fgm": 0,
             "tpm": 0,
             "tpa": 0,
+            "reb": 0,
             "biggestLead": 0,
             boxScore: teamBoxScore
         },
@@ -69,6 +70,7 @@ export default function initializeScoreBoard(team1: Team, team2: Team) {
             "fgm": 0,
             "tpm": 0,
             "tpa": 0,
+            "reb": 0,
             "biggestLead": 0,
             boxScore: teamBoxScore2
         }

@@ -7,6 +7,7 @@ import { playerShotDeterminator } from "./scoring";
 import { createPointParameters } from "./shotChartGenerator";
 import FGACircle from "../../components/GamePage/FGACircle";
 import { Team } from "../../interfaces/Team";
+import reboundDeterminator from "./rebound";
 
 export default function GameEngine({ currGameStatus, team1, team2, setGameRunning, setGameStatus }: {
     currGameStatus: GameStatus,
@@ -21,6 +22,7 @@ export default function GameEngine({ currGameStatus, team1, team2, setGameRunnin
     teamOfPossession = gameStatusCopy.possesion % 2 ? "home" : "away";
     gameStatusCopy.possesion++;
     const teamPlayers = teamOfPossession === "home" ? team1 : team2;
+    const defPlayers = teamOfPossession === "home" ? team2 : team1;
 
     // Calculate End of Game
     if (gameStatusCopy.gameClock === "00:00" && gameStatusCopy.activeQuarter === 4) {
@@ -42,6 +44,12 @@ export default function GameEngine({ currGameStatus, team1, team2, setGameRunnin
     const score = playerShotDeterminator(Object.values(teamPlayers.rosters[2022]).filter((item, idx) => idx < 5));
     gameStatusCopy.scoreBoard[teamOfPossession].fga++;
     score.fga === "threePoint" && gameStatusCopy.scoreBoard[teamOfPossession].tpa++;
+
+    const rebound = reboundDeterminator(Object.values(defPlayers.rosters[2022]).filter((item, idx) => idx < 5));
+    if (score.score === 0) {
+        gameStatusCopy.scoreBoard[teamOfPossession === "home" ? "away" : "home"].reb++;
+    }
+
     if (score.score !== 0) {
         gameStatusCopy.scoreBoard[teamOfPossession].fgm++;
         score.fga === "threePoint" && gameStatusCopy.scoreBoard[teamOfPossession].tpm++;
@@ -73,7 +81,7 @@ export default function GameEngine({ currGameStatus, team1, team2, setGameRunnin
     }
 
     // Update Box Score
-    gameStatusCopy.scoreBoard = updateBoxScore(score, gameStatusCopy.scoreBoard, teamOfPossession, gameClockObject.timeOfPossession);
+    gameStatusCopy.scoreBoard = updateBoxScore(score, gameStatusCopy.scoreBoard, teamOfPossession, teamOfPossession === "home" ? "away" : "home", gameClockObject.timeOfPossession, rebound);
 
     // Update Game Log
     gameStatusCopy.gameLog[gameStatusCopy.activeQuarter] = [

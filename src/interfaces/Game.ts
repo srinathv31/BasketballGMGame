@@ -28,6 +28,7 @@ interface TeamGameData {
     "fgm": number,
     "tpa": number,
     "tpm": number,
+    "reb": number,
     "biggestLead": number,
     boxScore: BoxScore
 }
@@ -65,6 +66,13 @@ export interface ShotChartFilter {
 export interface ShotData {
     fga: ShotAttempt;
     score: number;
+    player: {
+        name: string;
+        id: number;
+    }
+}
+
+export interface ReboundData {
     player: {
         name: string;
         id: number;

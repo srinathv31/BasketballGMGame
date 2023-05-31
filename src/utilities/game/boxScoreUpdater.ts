@@ -1,6 +1,6 @@
-import { ScoreBoard, ShotData } from "../../interfaces/Game";
+import { ReboundData, ScoreBoard, ShotData } from "../../interfaces/Game";
 
-export default function updateBoxScore(score: ShotData, scoreBoard: ScoreBoard, team: "home" | "away", timeOfPossession: number) {
+export default function updateBoxScore(score: ShotData, scoreBoard: ScoreBoard, team: "home" | "away", defTeam: "home" | "away", timeOfPossession: number, rebound?: ReboundData) {
     const scoreBoardCopy = { ...scoreBoard };
     const playerID = score.player.id;
 
@@ -27,5 +27,11 @@ export default function updateBoxScore(score: ShotData, scoreBoard: ScoreBoard, 
     }
 
     scoreBoardCopy[team].boxScore[playerID].PTS += score.score;
+
+    // Update Rebound
+    if (rebound && score.score === 0) {
+        scoreBoardCopy[defTeam].boxScore[rebound.player.id].REB++;
+    }
+
     return scoreBoardCopy;
 }

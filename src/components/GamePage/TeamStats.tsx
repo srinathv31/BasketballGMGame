@@ -10,7 +10,7 @@ export default function TeamStats({ scoreBoard, setFilter, filter }: {
     
     interface StatLabel {
         label: string,
-        statKey: "fgm" | "fga" | "tpm" | "tpa" | "biggestLead",
+        statKey: "fgm" | "fga" | "tpm" | "tpa" | "reb" | "biggestLead",
         statKeyAtt?: "fgm" | "fga" | "tpm" | "tpa" | "biggestLead",
         shotType?: ShotAttempt | "none"
     }
@@ -19,7 +19,7 @@ export default function TeamStats({ scoreBoard, setFilter, filter }: {
         { label: "FIELD GOALS", statKey: "fgm", statKeyAtt: "fga", shotType: "none" }, 
         { label: "3 POINTERS", statKey: "tpm", statKeyAtt: "tpa", shotType: "threePoint" }, 
         { label: "FREE THROWS", statKey: "fgm", statKeyAtt: "fga" }, 
-        { label: "REBOUNDS", statKey: "fgm" }, 
+        { label: "REBOUNDS", statKey: "reb" }, 
         { label: "TURNOVERS", statKey: "fgm" }, 
         { label: "BIGGEST LEAD", statKey: "biggestLead" } 
     ];

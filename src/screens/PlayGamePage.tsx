@@ -14,6 +14,7 @@ import { useTeamStore } from "../zustand/teamStore";
 import initializeGameLog from "../utilities/game/initalizeGameLog";
 import initializeScoreBoard from "../utilities/game/initalizeScoreBoard";
 import GameEngine from "../utilities/game/GameEngine";
+import GameEngine2 from "../utilities/game/GameEngine2";
 
 export default function PlayGamePage(): JSX.Element {
     const teamBears = useTeamStore((state) => state.teamState);
@@ -44,7 +45,7 @@ export default function PlayGamePage(): JSX.Element {
 
             // create a interval and get the id
             const myInterval = setInterval(() => {
-                setGameStatus(currGameStatus => GameEngine({ currGameStatus, team1, team2, setGameRunning, setGameStatus }));
+                setGameStatus(currGameStatus => GameEngine2({ currGameStatus, team1, team2, setGameRunning, setGameStatus }));
             }, gameSpeed);
             // clear out the interval using the id when unmounting the component
             return () => clearInterval(myInterval);

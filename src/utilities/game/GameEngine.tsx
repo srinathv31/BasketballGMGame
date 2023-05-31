@@ -1,6 +1,6 @@
 import React from "react";
 import { GameStatus } from "../../interfaces/Game";
-import updateBoxScore from "./boxScoreUpdater";
+// import updateBoxScore from "./boxScoreUpdater";
 import { calculateTimeLeft } from "./clock";
 import { gameActionGenerator } from "./gameActionGenerator";
 import { playerShotDeterminator } from "./scoring";
@@ -73,7 +73,7 @@ export default function GameEngine({ currGameStatus, team1, team2, setGameRunnin
     }
 
     // Update Box Score
-    gameStatusCopy.scoreBoard = updateBoxScore(score, gameStatusCopy.scoreBoard, teamOfPossession, gameClockObject.timeOfPossession);
+    // gameStatusCopy.scoreBoard = updateBoxScore(score, gameStatusCopy.scoreBoard, teamOfPossession, gameClockObject.timeOfPossession);
 
     // Update Game Log
     gameStatusCopy.gameLog[gameStatusCopy.activeQuarter] = [
